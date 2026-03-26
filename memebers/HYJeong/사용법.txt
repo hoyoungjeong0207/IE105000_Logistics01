@@ -1,0 +1,7 @@
+app.netlify.com
+
+Open https://app.netlify.com
+Select your site (melodic-pithivier-5dfc2b)
+Go to the Deploys tab
+Drag your hy_250403 folder onto the deploy area
+Wait for it to finish

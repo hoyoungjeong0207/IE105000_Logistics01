@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORLAB | 운영과학 연구실</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">
+                <span class="logo-text">OR</span><span class="logo-accent">LAB</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="#about" class="nav-link">소개</a></li>
+                <li><a href="#research" class="nav-link">연구분야</a></li>
+                <li><a href="#publications" class="nav-link">논문</a></li>
+                <li><a href="#projects" class="nav-link">연구과제</a></li>
+                <li><a href="#team" class="nav-link">연구진</a></li>
+                <li><a href="#contact" class="nav-link">연락처</a></li>
+            </ul>
+            <button class="nav-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg">
+            <div class="grid-pattern"></div>
+            <div class="gradient-orb orb-1"></div>
+            <div class="gradient-orb orb-2"></div>
+            <div class="gradient-orb orb-3"></div>
+            <div class="hero-illustration">
+                <svg viewBox="0 0 600 400" class="hero-svg" preserveAspectRatio="xMidYMid meet">
+                    <defs>
+                        <linearGradient id="heroGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#00D4AA;stop-opacity:0.3"/>
+                            <stop offset="100%" style="stop-color:#7B68EE;stop-opacity:0.1"/>
+                        </linearGradient>
+                        <linearGradient id="heroGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#7B68EE;stop-opacity:0.3"/>
+                            <stop offset="100%" style="stop-color:#FF6B9D;stop-opacity:0.1"/>
+                        </linearGradient>
+                    </defs>
+                    <!-- Network nodes and connections -->
+                    <circle cx="150" cy="100" r="25" fill="url(#heroGradient1)"/>
+                    <circle cx="450" cy="120" r="25" fill="url(#heroGradient1)"/>
+                    <circle cx="300" cy="250" r="30" fill="url(#heroGradient2)"/>
+                    <circle cx="100" cy="300" r="20" fill="url(#heroGradient1)"/>
+                    <circle cx="500" cy="280" r="20" fill="url(#heroGradient2)"/>
+                    <!-- Connection lines -->
+                    <line x1="150" y1="100" x2="300" y2="250" stroke="#00D4AA" stroke-width="2" opacity="0.3" stroke-dasharray="5,5"/>
+                    <line x1="450" y1="120" x2="300" y2="250" stroke="#7B68EE" stroke-width="2" opacity="0.3" stroke-dasharray="5,5"/>
+                    <line x1="100" y1="300" x2="300" y2="250" stroke="#00D4AA" stroke-width="2" opacity="0.3" stroke-dasharray="5,5"/>
+                    <line x1="500" y1="280" x2="300" y2="250" stroke="#7B68EE" stroke-width="2" opacity="0.3" stroke-dasharray="5,5"/>
+                    <!-- Data flow arrows -->
+                    <path d="M200 150 L220 160 L200 170 L210 160 Z" fill="#00D4AA" opacity="0.5"/>
+                    <path d="M400 180 L380 190 L400 200 L390 190 Z" fill="#7B68EE" opacity="0.5"/>
+                </svg>
+            </div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge">고려대학교 공과대학 연구소</div>
+            <h1 class="hero-title">
+                <span class="title-line">Operations</span>
+                <span class="title-line">Research</span>
+                <span class="title-line accent">Laboratory</span>
+            </h1>
+            <p class="hero-subtitle">
+                물류, 공급망, 지능형 제조 분야의 복잡한 현실 문제를 해결하기 위한 
+                혁신적인 최적화 솔루션을 개발합니다.
+            </p>
+            <div class="hero-cta">
+                <a href="#research" class="btn btn-primary">연구분야 보기</a>
+                <a href="#publications" class="btn btn-secondary">논문 보기</a>
+                <a href="#projects" class="btn btn-secondary">연구과제 보기</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number" data-count="17">0</span>
+                    <span class="stat-label">학술지 논문</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" data-count="2">0</span>
+                    <span class="stat-label">연구과제</span>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>스크롤하여 탐색하기</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section about">
+        <div class="container">
+            <a href="#" class="home-button" title="맨 위로">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 15l-6-6-6 6"/>
+                    <path d="M12 3v18"/>
+                </svg>
+            </a>
+            <div class="section-header">
+                <span class="section-tag">연구실 소개</span>
+                <h2 class="section-title">네트워크 최적화의<br><span class="highlight">혁신을 선도합니다</span></h2>
+            </div>
+            <div class="about-grid">
+                <div class="about-content">
+                    <p class="about-lead">
+                        Operations Research Laboratory는 물류, 공급망, 전력망, 지능형 제조 분야의 
+                        복잡한 현실 문제를 해결하기 위한 혁신적인 솔루션을 개발합니다.
+                    </p>
+                    <p>
+                        수학적 최적화와 머신러닝 기법을 활용하여 도시 물류 시스템, 드론 배송, 
+                        공급망 설계, 지능형 제조 공정 등 다양한 산업 분야에 실질적인 가치를 
+                        창출하는 연구를 수행합니다.
+                    </p>
+                    <div class="about-features-grid">
+                        <div class="feature-card">
+                            <div class="feature-illustration">
+                                <!-- NanoBanana Image: Replace with generated image -->
+                                <!-- <img src="images/logistics-system.jpg" alt="물류 시스템" class="feature-image"> -->
+                                <svg viewBox="0 0 240 180" class="feature-svg">
+                                    <defs>
+                                        <linearGradient id="logisticsGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#00D4AA;stop-opacity:0.9"/>
+                                            <stop offset="100%" style="stop-color:#00D4AA;stop-opacity:0.4"/>
+                                        </linearGradient>
+                                        <linearGradient id="logisticsGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#00D4AA;stop-opacity:0.6"/>
+                                            <stop offset="100%" style="stop-color:#7B68EE;stop-opacity:0.3"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <!-- Warehouse -->
+                                    <rect x="20" y="80" width="50" height="40" rx="3" fill="url(#logisticsGradient2)" opacity="0.5"/>
+                                    <rect x="25" y="75" width="40" height="8" rx="2" fill="url(#logisticsGradient2)"/>
+                                    <rect x="30" y="90" width="8" height="12" fill="url(#logisticsGradient)"/>
+                                    <rect x="42" y="90" width="8" height="12" fill="url(#logisticsGradient)"/>
+                                    <!-- Delivery Truck -->
+                                    <rect x="85" y="110" width="50" height="28" rx="4" fill="url(#logisticsGradient)"/>
+                                    <rect x="80" y="105" width="18" height="18" rx="3" fill="url(#logisticsGradient)"/>
+                                    <rect x="88" y="112" width="6" height="8" fill="#ffffff" opacity="0.3"/>
+                                    <circle cx="95" cy="145" r="7" fill="url(#logisticsGradient)"/>
+                                    <circle cx="95" cy="145" r="4" fill="#ffffff" opacity="0.5"/>
+                                    <circle cx="120" cy="145" r="7" fill="url(#logisticsGradient)"/>
+                                    <circle cx="120" cy="145" r="4" fill="#ffffff" opacity="0.5"/>
+                                    <!-- Drone with package -->
+                                    <path d="M165 35 L180 25 L195 35 L180 45 Z" fill="url(#logisticsGradient)"/>
+                                    <circle cx="180" cy="35" r="10" fill="url(#logisticsGradient)"/>
+                                    <circle cx="180" cy="35" r="6" fill="#ffffff" opacity="0.4"/>
+                                    <rect x="175" y="50" width="10" height="8" rx="2" fill="url(#logisticsGradient)"/>
+                                    <!-- Propellers -->
+                                    <circle cx="170" cy="30" r="2" fill="#00D4AA" opacity="0.6"/>
+                                    <circle cx="190" cy="30" r="2" fill="#00D4AA" opacity="0.6"/>
+                                    <circle cx="170" cy="40" r="2" fill="#00D4AA" opacity="0.6"/>
+                                    <circle cx="190" cy="40" r="2" fill="#00D4AA" opacity="0.6"/>
+                                    <!-- Route path -->
+                                    <path d="M70 100 Q120 70 180 35" stroke="url(#logisticsGradient2)" stroke-width="2.5" fill="none" opacity="0.5" stroke-dasharray="6,4"/>
+                                    <!-- Location markers -->
+                                    <circle cx="45" cy="100" r="5" fill="#00D4AA"/>
+                                    <circle cx="45" cy="100" r="2" fill="#ffffff"/>
+                                    <circle cx="180" cy="35" r="5" fill="#00D4AA"/>
+                                    <circle cx="180" cy="35" r="2" fill="#ffffff"/>
+                                    <!-- GPS signal waves -->
+                                    <circle cx="45" cy="100" r="12" fill="none" stroke="#00D4AA" stroke-width="1" opacity="0.3"/>
+                                    <circle cx="45" cy="100" r="18" fill="none" stroke="#00D4AA" stroke-width="1" opacity="0.2"/>
+                                </svg>
+                            </div>
+                            <div class="feature-content">
+                                <h4>물류 시스템</h4>
+                                <p>도시 물류, 드론 배송, 다중 교통수단 통합 운영 </p>
+                                <ul class="feature-list">
+                                    <li>차량 경로 최적화</li>
+                                    <li>실시간 물류 관리</li>
+                                    <li>지하물류 배송</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-illustration">
+                                <!-- NanoBanana Image: Replace with generated image -->
+                                <!-- <img src="images/supply-chain.jpg" alt="공급망 설계" class="feature-image"> -->
+                                <svg viewBox="0 0 240 180" class="feature-svg">
+                                    <defs>
+                                        <linearGradient id="supplyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#7B68EE;stop-opacity:0.9"/>
+                                            <stop offset="100%" style="stop-color:#7B68EE;stop-opacity:0.4"/>
+                                        </linearGradient>
+                                        <linearGradient id="supplyGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#7B68EE;stop-opacity:0.6"/>
+                                            <stop offset="100%" style="stop-color:#00D4AA;stop-opacity:0.3"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <!-- Central Hub -->
+                                    <circle cx="120" cy="90" r="22" fill="url(#supplyGradient)"/>
+                                    <circle cx="120" cy="90" r="16" fill="url(#supplyGradient2)"/>
+                                    <circle cx="120" cy="90" r="10" fill="#ffffff" opacity="0.3"/>
+                                    <!-- Supplier nodes -->
+                                    <circle cx="50" cy="50" r="16" fill="url(#supplyGradient)"/>
+                                    <rect x="42" y="42" width="16" height="16" rx="2" fill="#ffffff" opacity="0.2"/>
+                                    <circle cx="190" cy="50" r="16" fill="url(#supplyGradient)"/>
+                                    <rect x="182" y="42" width="16" height="16" rx="2" fill="#ffffff" opacity="0.2"/>
+                                    <circle cx="50" cy="130" r="16" fill="url(#supplyGradient)"/>
+                                    <rect x="42" y="122" width="16" height="16" rx="2" fill="#ffffff" opacity="0.2"/>
+                                    <circle cx="190" cy="130" r="16" fill="url(#supplyGradient)"/>
+                                    <rect x="182" y="122" width="16" height="16" rx="2" fill="#ffffff" opacity="0.2"/>
+                                    <!-- Distribution center -->
+                                    <circle cx="120" cy="150" r="18" fill="url(#supplyGradient)"/>
+                                    <rect x="110" y="142" width="20" height="16" rx="2" fill="#ffffff" opacity="0.2"/>
+                                    <!-- Connection lines with arrows -->
+                                    <path d="M66 56 L110 82" stroke="url(#supplyGradient2)" stroke-width="2.5" fill="none" opacity="0.6" marker-end="url(#arrowhead)"/>
+                                    <path d="M174 56 L130 82" stroke="url(#supplyGradient2)" stroke-width="2.5" fill="none" opacity="0.6" marker-end="url(#arrowhead)"/>
+                                    <path d="M66 124 L110 108" stroke="url(#supplyGradient2)" stroke-width="2.5" fill="none" opacity="0.6" marker-end="url(#arrowhead)"/>
+                                    <path d="M174 124 L130 108" stroke="url(#supplyGradient2)" stroke-width="2.5" fill="none" opacity="0.6" marker-end="url(#arrowhead)"/>
+                                    <path d="M120 112 L120 132" stroke="url(#supplyGradient2)" stroke-width="2.5" fill="none" opacity="0.6" marker-end="url(#arrowhead)"/>
+                                    <!-- Arrow marker definition -->
+                                    <defs>
+                                        <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                            <polygon points="0 0, 10 3, 0 6" fill="#7B68EE" opacity="0.6"/>
+                                        </marker>
+                                    </defs>
+                                    <!-- Data flow indicators -->
+                                    <circle cx="120" cy="90" r="28" fill="none" stroke="#7B68EE" stroke-width="1.5" opacity="0.3" stroke-dasharray="3,3"/>
+                                </svg>
+                            </div>
+                            <div class="feature-content">
+                                <h4>공급망 설계</h4>
+                                <p>적응형 공급망, 크라우드 배송, 기후 회복력 물류 </p>
+                                <ul class="feature-list">
+                                    <li>네트워크 최적화</li>
+                                    <li>크라우드 배송 통합</li>
+                                    <li>회복력 있는 설계</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-illustration">
+                                <!-- NanoBanana Image: Replace with generated image -->
+                                <!-- <img src="images/intelligent-manufacturing.jpg" alt="지능형 제조" class="feature-image"> -->
+                                <svg viewBox="0 0 240 180" class="feature-svg">
+                                    <defs>
+                                        <linearGradient id="manufacturingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#FF6B9D;stop-opacity:0.9"/>
+                                            <stop offset="100%" style="stop-color:#FF6B9D;stop-opacity:0.4"/>
+                                        </linearGradient>
+                                        <linearGradient id="manufacturingGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#FF6B9D;stop-opacity:0.6"/>
+                                            <stop offset="100%" style="stop-color:#7B68EE;stop-opacity:0.3"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <!-- Production line stations -->
+                                    <rect x="25" y="70" width="45" height="45" rx="5" fill="url(#manufacturingGradient2)" opacity="0.7"/>
+                                    <rect x="30" y="75" width="35" height="35" rx="3" fill="url(#manufacturingGradient)"/>
+                                    <circle cx="47.5" cy="92.5" r="8" fill="#ffffff" opacity="0.3"/>
+                                    
+                                    <rect x="95" y="70" width="45" height="45" rx="5" fill="url(#manufacturingGradient2)" opacity="0.7"/>
+                                    <rect x="100" y="75" width="35" height="35" rx="3" fill="url(#manufacturingGradient)"/>
+                                    <circle cx="117.5" cy="92.5" r="8" fill="#ffffff" opacity="0.3"/>
+                                    
+                                    <rect x="165" y="70" width="45" height="45" rx="5" fill="url(#manufacturingGradient2)" opacity="0.7"/>
+                                    <rect x="170" y="75" width="35" height="35" rx="3" fill="url(#manufacturingGradient)"/>
+                                    <circle cx="187.5" cy="92.5" r="8" fill="#ffffff" opacity="0.3"/>
+                                    
+                                    <!-- Conveyor belt -->
+                                    <rect x="25" y="125" width="185" height="8" rx="4" fill="url(#manufacturingGradient2)" opacity="0.4"/>
+                                    <rect x="25" y="125" width="185" height="4" rx="2" fill="url(#manufacturingGradient)"/>
+                                    
+                                    <!-- Process flow arrows -->
+                                    <path d="M70 92.5 L85 87.5 L70 82.5 L75 87.5 Z" fill="#FF6B9D" opacity="0.8"/>
+                                    <path d="M140 92.5 L155 87.5 L140 82.5 L145 87.5 Z" fill="#FF6B9D" opacity="0.8"/>
+                                    
+                                    <!-- Robotic arm -->
+                                    <circle cx="120" cy="35" r="10" fill="url(#manufacturingGradient)"/>
+                                    <circle cx="120" cy="35" r="6" fill="#ffffff" opacity="0.4"/>
+                                    <line x1="120" y1="35" x2="120" y2="55" stroke="#FF6B9D" stroke-width="4" stroke-linecap="round"/>
+                                    <line x1="120" y1="55" x2="105" y2="72" stroke="#FF6B9D" stroke-width="4" stroke-linecap="round"/>
+                                    <line x1="105" y1="72" x2="95" y2="85" stroke="#FF6B9D" stroke-width="3" stroke-linecap="round"/>
+                                    <circle cx="95" cy="85" r="6" fill="#FF6B9D"/>
+                                    <circle cx="95" cy="85" r="3" fill="#ffffff" opacity="0.5"/>
+                                    
+                                    <!-- Quality control indicator -->
+                                    <rect x="30" y="145" width="180" height="25" rx="4" fill="url(#manufacturingGradient2)" opacity="0.3"/>
+                                    <rect x="30" y="145" width="140" height="25" rx="4" fill="url(#manufacturingGradient)"/>
+                                    <circle cx="165" cy="157.5" r="6" fill="#ffffff" opacity="0.8"/>
+                                    <path d="M162 157.5 L164.5 160 L168 155.5" stroke="#FF6B9D" stroke-width="2" fill="none" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="feature-content">
+                                <h4>지능형 제조</h4>
+                                <p>공정 파라미터 최적화, 결함 감소, 머신러닝 기반 제조 시스템</p>
+                                <ul class="feature-list">
+                                    <li>공정 최적화</li>
+                                    <li>품질 관리 자동화</li>
+                                    <li>예측 유지보수</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-visual">
+                    <div class="visual-card">
+                        <div class="card-glow"></div>
+                        <div class="visual-content">
+                            <div class="network-animation">
+                                <svg viewBox="0 0 200 200" class="network-svg">
+                                    <defs>
+                                        <linearGradient id="nodeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#00D4AA"/>
+                                            <stop offset="100%" style="stop-color:#7B68EE"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <!-- Network lines -->
+                                    <line x1="100" y1="40" x2="50" y2="100" class="network-line"/>
+                                    <line x1="100" y1="40" x2="150" y2="100" class="network-line"/>
+                                    <line x1="50" y1="100" x2="100" y2="160" class="network-line"/>
+                                    <line x1="150" y1="100" x2="100" y2="160" class="network-line"/>
+                                    <line x1="50" y1="100" x2="150" y2="100" class="network-line"/>
+                                    <line x1="100" y1="40" x2="100" y2="160" class="network-line"/>
+                                    <!-- Network nodes -->
+                                    <circle cx="100" cy="40" r="12" class="network-node node-1"/>
+                                    <circle cx="50" cy="100" r="10" class="network-node node-2"/>
+                                    <circle cx="150" cy="100" r="10" class="network-node node-3"/>
+                                    <circle cx="100" cy="160" r="12" class="network-node node-4"/>
+                                </svg>
+                            </div>
+                            <div class="visual-label">물류 네트워크</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research Section -->
+    <section id="research" class="section research">
+        <div class="container">
+            <div class="section-header center">
+                <span class="section-tag">연구분야</span>
+                <h2 class="section-title">지능형 시스템의<br><span class="highlight">경계를 탐구합니다</span></h2>
+            </div>
+            <div class="research-grid">
+                <article class="research-card">
+                    <div class="card-number">01</div>
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                            <path d="M2 17l10 5 10-5"/>
+                            <path d="M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <h3>도시 물류 최적화</h3>
+                    <p>다중 교통수단 시스템, 지하 물류 네트워크, 비행선-차량 경로 문제를 통한 지속가능한 도시 물류 연구.</p>
+                    <div class="card-tags">
+                        <span>차량 경로</span>
+                        <span>다중 교통수단</span>
+                        <span>지속가능성</span>
+                    </div>
+                </article>
+                <article class="research-card">
+                    <div class="card-number">02</div>
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 19V5M5 12l7-7 7 7"/>
+                            <circle cx="12" cy="5" r="2"/>
+                        </svg>
+                    </div>
+                    <h3>드론 배송 시스템</h3>
+                    <p>비행 창고 운영, 트럭-드론 하이브리드 배송, 다중 비행 고도 최적화, 그리고 적재량-에너지 의존성 모델링.</p>
+                    <div class="card-tags">
+                        <span>무인항공기</span>
+                        <span>라스트마일</span>
+                        <span>하이브리드 시스템</span>
+                    </div>
+                </article>
+                <article class="research-card">
+                    <div class="card-number">03</div>
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <path d="M3 9h18M9 21V9"/>
+                        </svg>
+                    </div>
+                    <h3>메타러닝 및 적응형 AI</h3>
+                    <p>조합 최적화를 위한 적응형 연산자 선택, 공정 제어를 위한 강화학습, 신경망 기반 해법 접근법.</p>
+                    <div class="card-tags">
+                        <span>메타러닝</span>
+                        <span>강화학습</span>
+                        <span>딥러닝</span>
+                    </div>
+                </article>
+                <article class="research-card">
+                    <div class="card-number">04</div>
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                        </svg>
+                    </div>
+                    <h3>지능형 제조</h3>
+                    <p>열간 단조 공정 파라미터 최적화, 스탬핑 결함 감소, 머신러닝 통합 FEM 시뮬레이션.</p>
+                    <div class="card-tags">
+                        <span>제조</span>
+                        <span>유한요소법</span>
+                        <span>최적화</span>
+                    </div>
+                </article>
+                <article class="research-card">
+                    <div class="card-number">05</div>
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                        </svg>
+                    </div>
+                    <h3>네트워크 회복력</h3>
+                    <p>장애 전파 모델링, 복구 대응 최적화, 상호 의존적 인프라 시스템의 회복력 분석.</p>
+                    <div class="card-tags">
+                        <span>회복력</span>
+                        <span>네트워크</span>
+                        <span>시뮬레이션</span>
+                    </div>
+                </article>
+                <article class="research-card">
+                    <div class="card-number">06</div>
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 2a10 10 0 1 0 10 10H12V2z"/>
+                            <path d="M20 12a8 8 0 0 0-8-8v8h8z"/>
+                        </svg>
+                    </div>
+                    <h3>공급망 설계</h3>
+                    <p>적응형 공급망 시스템, 크라우드 배송과의 협업 경로, 기후 회복력 농업 물류.</p>
+                    <div class="card-tags">
+                        <span>공급망</span>
+                        <span>크라우드 배송</span>
+                        <span>기후</span>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Publications Section -->
+    <section id="publications" class="section publications">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">논문</span>
+                <h2 class="section-title">최근 <span class="highlight">연구 성과</span></h2>
+            </div>
+            <div class="publications-wrapper">
+                <div class="pub-filters">
+                    <button class="filter-btn active" data-filter="all">전체</button>
+                    <button class="filter-btn" data-filter="2025">2025</button>
+                    <button class="filter-btn" data-filter="2024">2024</button>
+                    <button class="filter-btn" data-filter="2023">2023</button>
+                    <button class="filter-btn" data-filter="earlier">이전</button>
+                </div>
+                <div class="publications-list">
+                    <article class="pub-item" data-year="2025">
+                        <div class="pub-year">2025</div>
+                        <div class="pub-content">
+                            <h4><a href="https://doi.org/10.1016/j.tre.2025.104415" target="_blank" rel="noopener noreferrer">Optimization of Urban Logistics with Multi-Modal Systems: A Comprehensive Study of the Airship-Vehicle Routing Problem</a></h4>
+                            <p class="pub-authors"><strong>Jeong, H.Y.</strong>, and Song, B.D.</p>
+                            <p class="pub-journal">Transportation Research Part E: Logistics and Transportation Review, 204, p.104415</p>
+                            <span class="pub-badge">SCIE, JCR 1.4%</span>
+                        </div>
+                        <div class="pub-cover">
+                            <img src="figures/journal/TRE.jpg" alt="Transportation Research Part E" class="journal-cover">
+                        </div>
+                    </article>
+                    <article class="pub-item" data-year="2025">
+                        <div class="pub-year">2025</div>
+                        <div class="pub-content">
+                            <h4><a href="https://doi.org/10.1016/j.asoc.2025.113030" target="_blank" rel="noopener noreferrer">Meta-Learning-Based Adaptive Operator Selection for Traveling Salesman Problem</a></h4>
+                            <p class="pub-authors"><strong>Jeong, H.Y.</strong>, and Song, B.D.</p>
+                            <p class="pub-journal">Applied Soft Computing, p.113930</p>
+                            <span class="pub-badge">SCIE, JCR 9.1%</span>
+                        </div>
+                        <div class="pub-cover">
+                            <img src="figures/journal/AOSC.jpg" alt="Applied Soft Computing" class="journal-cover">
+                        </div>
+                    </article>
+                    <article class="pub-item" data-year="2025">
+                        <div class="pub-year">2025</div>
+                        <div class="pub-content">
+                            <h4><a href="#" target="_blank" rel="noopener noreferrer">Optimizing Urban Logistics: Vehicle Routing Problem with Underground Transportation</a></h4>
+                            <p class="pub-authors"><strong>Jeong, H.Y.</strong>, and Song, B.D.</p>
+                            <p class="pub-journal">IEEE Transactions on Intelligent Transportation Systems</p>
+                            <span class="pub-badge">SCIE</span>
+                        </div>
+                        <div class="pub-cover">
+                            <img src="figures/journal/IEEETITS.jpg" alt="IEEE Transactions on Intelligent Transportation Systems" class="journal-cover">
+                        </div>
+                    </article>
+                    <div class="pub-more-indicator">
+                        <span>...</span>
+                    </div>
+                    <article class="pub-item" data-year="2024">
+                        <div class="pub-year">2024</div>
+                        <div class="pub-content">
+                            <h4><a href="https://doi.org/10.3390/ma17112578" target="_blank" rel="noopener noreferrer">Numerical optimization of variable blank holder force trajectories in stamping process for multi-defect reduction</a></h4>
+                            <p class="pub-authors">Guo, F., <strong>Jeong, H.Y.</strong>, Park, D., Kim, G., Sung, B., and Kim, N.</p>
+                            <p class="pub-journal">Materials, 17(11), p.2578</p>
+                            <span class="pub-badge">SCIE</span>
+                        </div>
+                        <div class="pub-cover">
+                            <img src="figures/journal/Materials_v7i11.png" alt="Materials" class="journal-cover">
+                        </div>
+                    </article>
+                    <article class="pub-item" data-year="2024">
+                        <div class="pub-year">2024</div>
+                        <div class="pub-content">
+                            <h4><a href="https://doi.org/10.1007/s00170-024" target="_blank" rel="noopener noreferrer">Numerical multi-objective optimization of segmented and variable blank holder force trajectories in deep drawing based on DNN-GA-MCS strategy</a></h4>
+                            <p class="pub-authors">Guo, F., <strong>Jeong, H.Y.</strong>, Park, D., Sung, B., and Kim, N.*</p>
+                            <p class="pub-journal">The International Journal of Advanced Manufacturing Technology, pp.1–24</p>
+                            <span class="pub-badge">SCIE</span>
+                        </div>
+                        <div class="pub-cover">
+                            <img src="figures/journal/IJAMT.jfif" alt="International Journal of Advanced Manufacturing Technology" class="journal-cover">
+                        </div>
+                    </article>
+                    <article class="pub-item" data-year="2023">
+                        <div class="pub-year">2023</div>
+                        <div class="pub-content">
+                            <h4><a href="https://doi.org/10.1016/j.jmrt.2023.11.193" target="_blank" rel="noopener noreferrer">Optimizing process parameters for hot forging of Ti-6242 alloy: A machine learning and FEM simulation approach</a></h4>
+                            <p class="pub-authors">Kim, Y., <strong>Jeong, H.Y.</strong>, Park, J., Kim, K., Kwon, H., Ju, G., and Kim, N.</p>
+                            <p class="pub-journal">Journal of Materials Research and Technology, 27, pp.8228–8243</p>
+                            <span class="pub-badge">SCIE</span>
+                        </div>
+                        <div class="pub-cover">
+                            <img src="figures/journal/JMRT.jpg" alt="Journal of Materials Research and Technology" class="journal-cover">
+                        </div>
+                    </article>
+                    <article class="pub-item" data-year="2023">
+                        <div class="pub-year">2023</div>
+                        <div class="pub-content">
+                            <h4><a href="https://doi.org/10.1016/j.cor.2023.106389" target="_blank" rel="noopener noreferrer">Two-echelon collaborative routing problem with heterogeneous crowd-shippers</a></h4>
+                            <p class="pub-authors">Kim, B., <strong>Jeong, H.Y.*</strong>, and Lee, S.</p>
+                            <p class="pub-journal">Computers & Operations Research, 160, p.106389</p>
+                            <span class="pub-badge">SCIE</span>
+                        </div>
+                        <div class="pub-cover">
+                            <img src="figures/journal/CNOR.jpg" alt="Computers & Operations Research" class="journal-cover">
+                        </div>
+                    </article>
+                    <article class="pub-item" data-year="2023">
+                        <div class="pub-year">2023</div>
+                        <div class="pub-content">
+                            <h4><a href="https://doi.org/10.3390/systems11100514" target="_blank" rel="noopener noreferrer">Adaptive supply chain system design for fruit crops under climate change</a></h4>
+                            <p class="pub-authors"><strong>Jeong, H.Y.</strong>, and Choi, C.*</p>
+                            <p class="pub-journal">Systems, 11(10), p.514</p>
+                            <span class="pub-badge">SCIE</span>
+                        </div>
+                        <div class="pub-cover">
+                            <img src="figures/journal/systems_v11c10.png" alt="Systems" class="journal-cover">
+                        </div>
+                    </article>
+                    <article class="pub-item" data-year="2023">
+                        <div class="pub-year">2023</div>
+                        <div class="pub-content">
+                            <h4><a href="https://doi.org/10.1016/j.eswa.2023.120260" target="_blank" rel="noopener noreferrer">Drone routing problem with truck: Optimization and quantitative analysis</a></h4>
+                            <p class="pub-authors"><strong>Jeong, H.Y.</strong>, and Lee, S.*</p>
+                            <p class="pub-journal">Expert Systems with Applications, 227, p.120260</p>
+                            <span class="pub-badge">SCIE</span>
+                        </div>
+                        <div class="pub-cover">
+                            <img src="figures/journal/ESWA.jpg" alt="Expert Systems with Applications" class="journal-cover">
+                        </div>
+                    </article>
+                    <article class="pub-item" data-year="2023">
+                        <div class="pub-year">2023</div>
+                        <div class="pub-content">
+                            <h4><a href="https://doi.org/10.1016/j.jmrt.2023.09.059" target="_blank" rel="noopener noreferrer">Cogging process design of M50 bearing steel for billet quality</a></h4>
+                            <p class="pub-authors">Park, J., Kim, Y., <strong>Jeong, H.Y.</strong>, Kwon, H., Kwon, Y., and Kim, N.*</p>
+                            <p class="pub-journal">Journal of Materials Research and Technology, 26, pp.5576–5593</p>
+                            <span class="pub-badge">SCIE</span>
+                        </div>
+                        <div class="pub-cover">
+                            <img src="figures/journal/JMRT.jpg" alt="Journal of Materials Research and Technology" class="journal-cover">
+                        </div>
+                    </article>
+                    <article class="pub-item" data-year="2023">
+                        <div class="pub-year">2023</div>
+                        <div class="pub-content">
+                            <h4><a href="https://doi.org/10.1016/j.simpat.2023.102730" target="_blank" rel="noopener noreferrer">Disruption propagation and repair response in interdependent systems: Network model and simulation approach</a></h4>
+                            <p class="pub-authors"><strong>Jeong, H.Y.*</strong>, Kim, Y., Lee, S., Moreland, J., and Zhou, C.</p>
+                            <p class="pub-journal">Simulation Modelling Practice and Theory, 124, p.102730</p>
+                            <span class="pub-badge">SCIE</span>
+                        </div>
+                        <div class="pub-cover">
+                            <img src="figures/journal/SMPT.jpg" alt="Simulation Modelling Practice and Theory" class="journal-cover">
+                        </div>
+                    </article>
+                    <article class="pub-item" data-year="2023">
+                        <div class="pub-year">2023</div>
+                        <div class="pub-content">
+                            <h4><a href="https://doi.org/10.1016/j.jmrt.2023.01.067" target="_blank" rel="noopener noreferrer">Processing parameters optimization in hot forging of AISI 4340 steel using instability map and reinforcement learning</a></h4>
+                            <p class="pub-authors"><strong>Jeong, H.Y.</strong>, Park, J., Kim, Y., Shin, S.Y., and Kim, N.*</p>
+                            <p class="pub-journal">Journal of Materials Research and Technology, 23, pp.1995–2009</p>
+                            <span class="pub-badge">SCIE</span>
+                        </div>
+                        <div class="pub-cover">
+                            <img src="figures/journal/JMRT.jpg" alt="Journal of Materials Research and Technology" class="journal-cover">
+                        </div>
+                    </article>
+                    <article class="pub-item" data-year="earlier">
+                        <div class="pub-year">2019</div>
+                        <div class="pub-content">
+                            <h4><a href="https://doi.org/10.1016/j.ijpe.2019.04.025" target="_blank" rel="noopener noreferrer">Truck-drone hybrid delivery routing: Payload-energy dependency and No-Fly zones</a></h4>
+                            <p class="pub-authors"><strong>Jeong, H.Y.</strong>, Song, B.D.*, and Lee, S.</p>
+                            <p class="pub-journal">International Journal of Production Economics, 214, pp.220–233</p>
+                            <span class="pub-badge">SCIE</span>
+                        </div>
+                        <div class="pub-cover">
+                            <img src="figures/journal/IJPE.jpg" alt="International Journal of Production Economics" class="journal-cover">
+                        </div>
+                    </article>
+                    <article class="pub-item" data-year="earlier">
+                        <div class="pub-year">2022</div>
+                        <div class="pub-content">
+                            <h4><a href="https://doi.org/10.1016/j.trc.2022.103831" target="_blank" rel="noopener noreferrer">Optimal scheduling and quantitative analysis for multi-flying warehouse scheduling problem: Amazon airborne fulfillment center</a></h4>
+                            <p class="pub-authors"><strong>Jeong, H.Y.</strong>, Song, B.D.*, and Lee, S.</p>
+                            <p class="pub-journal">Transportation Research Part C, 143, p.103831</p>
+                            <span class="pub-badge">SCIE</span>
+                        </div>
+                        <div class="pub-cover">
+                            <img src="figures/journal/TRC.jpg" alt="Transportation Research Part C" class="journal-cover">
+                        </div>
+                    </article>
+                    <article class="pub-item" data-year="earlier">
+                        <div class="pub-year">2020</div>
+                        <div class="pub-content">
+                            <h4><a href="https://doi.org/10.1109/TITS.2020.3049012" target="_blank" rel="noopener noreferrer">The flying warehouse delivery system: A quantitative approach for the optimal operation policy of airborne fulfillment center</a></h4>
+                            <p class="pub-authors"><strong>Jeong, H.Y.</strong>, Song, B.D.*, and Lee, S.</p>
+                            <p class="pub-journal">IEEE Transactions on Intelligent Transportation Systems, 22(12), pp.7521–7530</p>
+                            <span class="pub-badge">SCIE</span>
+                        </div>
+                        <div class="pub-cover">
+                            <img src="figures/journal/IEEETITS.jpg" alt="IEEE Transactions on Intelligent Transportation Systems" class="journal-cover">
+                        </div>
+                    </article>
+                    <article class="pub-item" data-year="earlier">
+                        <div class="pub-year">2020</div>
+                        <div class="pub-content">
+                            <h4><a href="https://doi.org/10.1016/j.tre.2020.101901" target="_blank" rel="noopener noreferrer">The humanitarian flying warehouse</a></h4>
+                            <p class="pub-authors"><strong>Jeong, H.Y.</strong>, David, J.Y., Min, B.C., and Lee, S.*</p>
+                            <p class="pub-journal">Transportation Research Part E, 136, p.101901</p>
+                            <span class="pub-badge">SCIE</span>
+                        </div>
+                        <div class="pub-cover">
+                            <img src="figures/journal/TRE.jpg" alt="Transportation Research Part E" class="journal-cover">
+                        </div>
+                    </article>
+                </div>
+                <a href="publications.html" class="view-all-btn">전체 논문 보기 →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section projects">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">연구과제</span>
+                <h2 class="section-title"><span class="highlight">연구과제</span></h2>
+            </div>
+            <div class="projects-timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-main">
+                            <div class="timeline-text">
+                                <span class="timeline-period">2025.06 ~ 2028.05</span>
+                                <h4>V2G 기반 스마트 물류-전력망 통합 운영 최적화 연구</h4>
+                                <p>전기차가 소비 주체를 넘어 에너지 조절 자원으로 기능하는 상황을 전제로, 물류 네트워크의 운영 의사결정과 전력 계통의 안정적 관리를 하나의 최적화 틀에서 통합하여 비용 효율성·계통 안정성·지속가능성을 동시에 달성할 수 있는 통합 운영 전략을 제시하는 연구</p>
+                                <span class="timeline-funder">한국연구재단 · 연구책임자</span>
+                            </div>
+                            <div class="timeline-logo">
+                                <img src="figures/project/NRF.svg" alt="한국연구재단" class="org-logo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-main">
+                            <div class="timeline-text">
+                                <span class="timeline-period">2026.01 ~ 2026.12</span>
+                                <h4>실시간 동적 가격 반응형 EV 물류–배전망 통합 운영 모형(EVRP–OPF) 정립에 관한 연구</h4>
+                                <p>실시간 전력요금 신호를 내재화하여 EV 물류 경로·충방전 의사결정과 배전망 최적화(OPF)를 연계하고, 이를 통해 물류 비용과 전력 계통 부담을 동시에 최소화하는 통합 운영 최적화 프레임워크를 정립하는 연구</p>
+                                <span class="timeline-funder">정석물류학술재단 · 연구책임자</span>
+                            </div>
+                            <div class="timeline-logo">
+                                <img src="figures/project/jungseok.jpg" alt="정석물류학술재단" class="org-logo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-main">
+                            <div class="timeline-text">
+                                <span class="timeline-period">2023 ~ 현재</span>
+                                <h4>Real-time last mile delivery system using collaborative ground-aerial movable stations: Theory, algorithm and application</h4>
+                                <p>실시간 라스트마일 배송 시스템 개발을 위한 지상-공중 이동 기지 협업 시스템의 이론, 알고리즘 및 응용 연구</p>
+                                <span class="timeline-funder">한국연구재단</span>
+                            </div>
+                            <div class="timeline-logo">
+                                <img src="figures/project/NRF.svg" alt="한국연구재단" class="org-logo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a href="projects.html" class="view-all-btn">전체 과제 보기 →</a>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" class="section team">
+        <div class="container">
+            <div class="section-header center">
+                <span class="section-tag">연구책임자</span>
+                <h2 class="section-title"><span class="highlight">연구진</span> 소개</h2>
+            </div>
+            <div class="team-single">
+                <div class="team-card principal solo">
+                    <div class="member-image">
+                        <img src="figures/정호영.jpg" alt="정호영 박사" class="profile-photo">
+                        <div class="member-glow"></div>
+                    </div>
+                    <div class="member-info">
+                        <span class="member-role">연구책임자</span>
+                        <h3>정호영 박사</h3>
+                        <p class="member-title">박사후연구원</p>
+                        <p class="member-affiliation">고려대학교 공과대학 연구소</p>
+                        <div class="member-education">
+                            <p>공학박사, 산업경영공학, 퍼듀대학교</p>
+                            <p>공학석사, 산업경영공학, 퍼듀대학교</p>
+                        </div>
+                        <div class="member-links">
+                            <a href="mailto:ghy27@korea.ac.kr" class="member-link" title="이메일">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                    <polyline points="22,6 12,13 2,6"/>
+                                </svg>
+                            </a>
+                            <a href="https://scholar.google.com" class="member-link" title="Google Scholar">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 14l9-5-9-5-9 5 9 5z"/>
+                                    <path d="M12 14l6.16-3.42a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+                                </svg>
+                            </a>
+                            <a href="https://melodic-pithivier-5dfc2b.netlify.app/" class="member-link" title="개인 웹사이트">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="2" y1="12" x2="22" y2="12"/>
+                                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="join-banner">
+                    <div class="join-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="16"/>
+                            <line x1="8" y1="12" x2="16" y2="12"/>
+                        </svg>
+                    </div>
+                    <div class="join-text">
+                        <h3>연구진 모집</h3>
+                        <p>운영과학과 최적화에 열정을 가진 동기부여된 연구자를 찾고 있습니다.</p>
+                    </div>
+                    <a href="#contact" class="btn btn-primary">문의하기</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section contact">
+        <div class="container">
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <span class="section-tag">연락처</span>
+                    <h2 class="section-title">함께 <span class="highlight">협력</span>해요</h2>
+                    <p>연구나 협력에 관심이 있으신가요? 언제든지 연락 주시기 바랍니다.</p>
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                    <circle cx="12" cy="10" r="3"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4>위치</h4>
+                                <p>고려대학교<br>공과대학 연구소<br>서울특별시, 대한민국</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                    <polyline points="22,6 12,13 2,6"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4>이메일</h4>
+                                <p><a href="mailto:ghy27@korea.ac.kr">ghy27@korea.ac.kr</a></p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4>전화</h4>
+                                <p>(+82) 10-3281-4475</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form-wrapper">
+                    <form class="contact-form">
+                        <div class="form-group">
+                            <input type="text" id="name" required>
+                            <label for="name">성함</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="email" required>
+                            <label for="email">이메일 주소</label>
+                        </div>
+                        <div class="form-group">
+                            <select id="subject" required>
+                                <option value="" disabled selected></option>
+                                <option value="collaboration">연구 협력</option>
+                                <option value="student">입학 문의</option>
+                                <option value="industry">산업체 협력</option>
+                                <option value="other">기타</option>
+                            </select>
+                            <label for="subject">문의 유형</label>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="message" rows="4" required></textarea>
+                            <label for="message">메시지</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">전송하기</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="#" class="nav-logo">
+                        <span class="logo-text">OR</span><span class="logo-accent">LAB</span>
+                    </a>
+                    <p>운영과학 연구실<br>고려대학교</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-col">
+                        <h4>빠른 링크</h4>
+                        <a href="#about">소개</a>
+                        <a href="#research">연구분야</a>
+                        <a href="#publications">논문</a>
+                        <a href="#projects">연구과제</a>
+                        <a href="#team">연구진</a>
+                    </div>
+                    <div class="footer-col">
+                        <h4>자료</h4>
+                        <a href="#">GitHub</a>
+                        <a href="#">Google Scholar</a>
+                        <a href="#">ResearchGate</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 ORLAB. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

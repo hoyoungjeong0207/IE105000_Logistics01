@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>논문 | ORLAB</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Instrument+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .publications-page {
+            padding-top: 120px;
+            min-height: 100vh;
+        }
+
+        .publications-page .section-header {
+            margin-bottom: 40px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--accent-primary);
+            font-size: 0.85rem;
+            margin-bottom: 30px;
+            transition: all var(--transition-fast);
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            transform: translateX(-3px);
+        }
+
+        .back-link svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .pub-section {
+            margin-bottom: 60px;
+        }
+
+        .pub-section-title {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+            color: var(--accent-primary);
+        }
+
+        .publications-full-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .pub-item-full {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 30px;
+            padding: 30px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            transition: all var(--transition-medium);
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .pub-item-full:hover {
+            border-color: var(--border-highlight);
+            transform: translateX(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .pub-item-full h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .pub-cover-full {
+            width: 120px;
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            min-width: 120px;
+        }
+
+        .journal-cover-full {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform var(--transition-medium);
+        }
+
+        .pub-cover-full img[src*="conference"] {
+            object-fit: contain;
+            background: var(--bg-secondary);
+            padding: 10px;
+        }
+
+        .pub-item-full:hover .journal-cover-full {
+            transform: scale(1.05);
+        }
+
+        .pub-item-full h4 a {
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: color var(--transition-fast);
+        }
+
+        .pub-item-full h4 a:hover {
+            color: var(--accent-primary);
+            text-decoration: underline;
+        }
+
+        .pub-item-full .pub-authors {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .pub-item-full .pub-journal {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-bottom: 12px;
+        }
+
+        .pub-badges {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .pub-badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            background: rgba(0, 212, 170, 0.15);
+            color: var(--accent-primary);
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .pub-badge.conference {
+            background: rgba(123, 104, 238, 0.15);
+            color: var(--accent-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .pub-item-full {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .pub-cover-full {
+                width: 100px;
+                height: 130px;
+                margin: 0 auto;
+            }
+
+            .pub-cover-full img[src*="conference"] {
+                padding: 8px;
+            }
+
+            .timeline-logo .org-logo {
+                width: 160px;
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar scrolled">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span class="logo-text">OR</span><span class="logo-accent">LAB</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="index.html#about" class="nav-link">소개</a></li>
+                <li><a href="index.html#research" class="nav-link">연구분야</a></li>
+                <li><a href="index.html#publications" class="nav-link">논문</a></li>
+                <li><a href="index.html#projects" class="nav-link">연구과제</a></li>
+                <li><a href="index.html#team" class="nav-link">연구진</a></li>
+                <li><a href="index.html#contact" class="nav-link">연락처</a></li>
+            </ul>
+            <button class="nav-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Publications Page -->
+    <section class="section publications-page">
+        <div class="container">
+            <a href="index.html" class="back-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                홈으로
+            </a>
+
+            <div class="section-header">
+                <span class="section-tag">논문</span>
+                <h2 class="section-title">전체 <span class="highlight">논문 목록</span></h2>
+            </div>
+
+            <!-- Journal Papers -->
+            <div class="pub-section">
+                <h3 class="pub-section-title">학술지 논문</h3>
+                <div class="publications-full-list">
+                    <article class="pub-item-full">
+                        <div>
+                            <h4><a href="https://doi.org/10.1016/j.tre.2025.104415" target="_blank"
+                                    rel="noopener noreferrer">Optimization of Urban Logistics with Multi-Modal Systems:
+                                    A Comprehensive Study of the Airship-Vehicle Routing Problem</a></h4>
+                            <p class="pub-authors"><strong>Jeong, H.Y.</strong>, and Song, B.D.</p>
+                            <p class="pub-journal">Transportation Research Part E: Logistics and Transportation Review,
+                                204, p.104415, 2025</p>
+                            <div class="pub-badges">
+                                <span class="pub-badge">SCIE</span>
+                                <span class="pub-badge">JCR 1.4%</span>
+                            </div>
+                        </div>
+                        <div class="pub-cover-full">
+                            <img src="figures/journal/TRE.jpg" alt="Transportation Research Part E"
+                                class="journal-cover-full">
+                        </div>
+                    </article>
+
+                    <article class="pub-item-full">
+                        <div>
+                            <h4><a href="https://doi.org/10.1016/j.asoc.2025.113030" target="_blank"
+                                    rel="noopener noreferrer">Meta-Learning-Based Adaptive Operator Selection for
+                                    Traveling Salesman Problem</a></h4>
+                            <p class="pub-authors"><strong>Jeong, H.Y.</strong>, and Song, B.D.</p>
+                            <p class="pub-journal">Applied Soft Computing, p.113930, 2025</p>
+                            <div class="pub-badges">
+                                <span class="pub-badge">SCIE</span>
+                                <span class="pub-badge">JCR 9.1%</span>
+                            </div>
+                        </div>
+                        <div class="pub-cover-full">
+                            <img src="figures/journal/AOSC.jpg" alt="Applied Soft Computing" class="journal-cover-full">
+                        </div>
+                    </article>
+
+                    <article class="pub-item-full">
+                        <div>
+                            <h4><a href="#" target="_blank" rel="noopener noreferrer">Optimizing Urban Logistics:
+                                    Vehicle Routing Problem with Underground Transportation</a></h4>
+                            <p class="pub-authors"><strong>Jeong, H.Y.</strong>, and Song, B.D.</p>
+                            <p class="pub-journal">IEEE Transactions on Intelligent Transportation Systems, 2025</p>
+                            <div class="pub-badges">
+                                <span class="pub-badge">SCIE</span>
+                            </div>
+                        </div>
+                        <div class="pub-cover-full">
+                            <img src="figures/journal/IEEETITS.jpg"
+                                alt="IEEE Transactions on Intelligent Transportation Systems"
+                                class="journal-cover-full">
+                        </div>
+                    </article>
+
+                    <article class="pub-item-full">
+                        <div>
+                            <h4><a href="https://doi.org/10.1016/j.cie.2024.110565" target="_blank"
+                                    rel="noopener noreferrer">Drone delivery problem with multi-flight level: Machine
+                                    learning based solution approach</a></h4>
+                            <p class="pub-authors">Kim, Y., <strong>Jeong, H.Y.*</strong>, and Lee, S.</p>
+                            <p class="pub-journal">Computers & Industrial Engineering, 197, p.110565, 2024</p>
+                            <div class="pub-badges">
+                                <span class="pub-badge">SCIE</span>
+                            </div>
+                        </div>
+                        <div class="pub-cover-full">
+                            <img src="figures/journal/CNIE.jpg" alt="Computers & Industrial Engineering"
+                                class="journal-cover-full">
+                        </div>
+                    </article>
+
+                    <article class="pub-item-full">
+                        <div>
+                            <h4><a href="https://doi.org/10.3390/ma17112578" target="_blank"
+                                    rel="noopener noreferrer">Numerical optimization of variable blank holder force
+                                    trajectories in stamping process for multi-defect reduction</a></h4>
+                            <p class="pub-authors">Guo, F., <strong>Jeong, H.Y.</strong>, Park, D., Kim, G., Sung, B.,
+                                and Kim, N.</p>
+                            <p class="pub-journal">Materials, 17(11), p.2578, 2024</p>
+                            <div class="pub-badges">
+                                <span class="pub-badge">SCIE</span>
+                            </div>
+                        </div>
+                        <div class="pub-cover-full">
+                            <img src="figures/journal/Materials_v7i11.png" alt="Materials" class="journal-cover-full">
+                        </div>
+                    </article>
+
+                    <article class="pub-item-full">
+                        <div>
+                            <h4><a href="https://doi.org/10.1007/s00170-024" target="_blank"
+                                    rel="noopener noreferrer">Numerical multi-objective optimization of segmented and
+                                    variable blank holder force trajectories in deep drawing based on DNN-GA-MCS
+                                    strategy</a></h4>
+                            <p class="pub-authors">Guo, F., <strong>Jeong, H.Y.</strong>, Park, D., Sung, B., and Kim,
+                                N.*</p>
+                            <p class="pub-journal">The International Journal of Advanced Manufacturing Technology,
+                                pp.1–24, 2024</p>
+                            <div class="pub-badges">
+                                <span class="pub-badge">SCIE</span>
+                            </div>
+                        </div>
+                        <div class="pub-cover-full">
+                            <img src="figures/journal/IJAMT.jfif"
+                                alt="International Journal of Advanced Manufacturing Technology"
+                                class="journal-cover-full">
+                        </div>
+                    </article>
+
+                    <article class="pub-item-full">
+                        <div>
+                            <h4><a href="https://doi.org/10.1016/j.jmrt.2023.11.193" target="_blank"
+                                    rel="noopener noreferrer">Optimizing process parameters for hot forging of Ti-6242
+                                    alloy: A machine learning and FEM simulation approach</a></h4>
+                            <p class="pub-authors">Kim, Y., <strong>Jeong, H.Y.</strong>, Park, J., Kim, K., Kwon, H.,
+                                Ju, G., and Kim, N.</p>
+                            <p class="pub-journal">Journal of Materials Research and Technology, 27, pp.8228–8243, 2023
+                            </p>
+                            <div class="pub-badges">
+                                <span class="pub-badge">SCIE</span>
+                            </div>
+                        </div>
+                        <div class="pub-cover-full">
+                            <img src="figures/journal/JMRT.jpg" alt="Journal of Materials Research and Technology"
+                                class="journal-cover-full">
+                        </div>
+                    </article>
+
+                    <article class="pub-item-full">
+                        <div>
+                            <h4><a href="https://doi.org/10.1016/j.cor.2023.106389" target="_blank"
+                                    rel="noopener noreferrer">Two-echelon collaborative routing problem with
+                                    heterogeneous crowd-shippers</a></h4>
+                            <p class="pub-authors">Kim, B., <strong>Jeong, H.Y.*</strong>, and Lee, S.</p>
+                            <p class="pub-journal">Computers & Operations Research, 160, p.106389, 2023</p>
+                            <div class="pub-badges">
+                                <span class="pub-badge">SCIE</span>
+                            </div>
+                        </div>
+                        <div class="pub-cover-full">
+                            <img src="figures/journal/CNOR.jpg" alt="Computers & Operations Research"
+                                class="journal-cover-full">
+                        </div>
+                    </article>
+
+                    <article class="pub-item-full">
+                        <div>
+                            <h4><a href="https://doi.org/10.3390/systems11100514" target="_blank"
+                                    rel="noopener noreferrer">Adaptive supply chain system design for fruit crops under
+                                    climate change</a></h4>
+                            <p class="pub-authors"><strong>Jeong, H.Y.</strong>, and Choi, C.*</p>
+                            <p class="pub-journal">Systems, 11(10), p.514, 2023</p>
+                            <div class="pub-badges">
+                                <span class="pub-badge">SCIE</span>
+                            </div>
+                        </div>
+                        <div class="pub-cover-full">
+                            <img src="figures/journal/systems_v11c10.png" alt="Systems" class="journal-cover-full">
+                        </div>
+                    </article>
+
+                    <article class="pub-item-full">
+                        <div>
+                            <h4><a href="https://doi.org/10.1016/j.eswa.2023.120260" target="_blank"
+                                    rel="noopener noreferrer">Drone routing problem with truck: Optimization and
+                                    quantitative analysis</a></h4>
+                            <p class="pub-authors"><strong>Jeong, H.Y.</strong>, and Lee, S.*</p>
+                            <p class="pub-journal">Expert Systems with Applications, 227, p.120260, 2023</p>
+                            <div class="pub-badges">
+                                <span class="pub-badge">SCIE</span>
+                            </div>
+                        </div>
+                        <div class="pub-cover-full">
+                            <img src="figures/journal/ESWA.jpg" alt="Expert Systems with Applications"
+                                class="journal-cover-full">
+                        </div>
+                    </article>
+
+                    <article class="pub-item-full">
+                        <div>
+                            <h4><a href="https://doi.org/10.1016/j.jmrt.2023.09.059" target="_blank"
+                                    rel="noopener noreferrer">Cogging process design of M50 bearing steel for billet
+                                    quality</a></h4>
+                            <p class="pub-authors">Park, J., Kim, Y., <strong>Jeong, H.Y.</strong>, Kwon, H., Kwon, Y.,
+                                and Kim, N.*</p>
+                            <p class="pub-journal">Journal of Materials Research and Technology, 26, pp.5576–5593, 2023
+                            </p>
+                            <div class="pub-badges">
+                                <span class="pub-badge">SCIE</span>
+                            </div>
+                        </div>
+                        <div class="pub-cover-full">
+                            <img src="figures/journal/JMRT.jpg" alt="Journal of Materials Research and Technology"
+                                class="journal-cover-full">
+                        </div>
+                    </article>
+
+                    <article class="pub-item-full">
+                        <div>
+                            <h4><a href="https://doi.org/10.1016/j.simpat.2023.102730" target="_blank"
+                                    rel="noopener noreferrer">Disruption propagation and repair response in
+                                    interdependent systems: Network model and simulation approach</a></h4>
+                            <p class="pub-authors"><strong>Jeong, H.Y.*</strong>, Kim, Y., Lee, S., Moreland, J., and
+                                Zhou, C.</p>
+                            <p class="pub-journal">Simulation Modelling Practice and Theory, 124, p.102730, 2023</p>
+                            <div class="pub-badges">
+                                <span class="pub-badge">SCIE</span>
+                            </div>
+                        </div>
+                        <div class="pub-cover-full">
+                            <img src="figures/journal/SMPT.jpg" alt="Simulation Modelling Practice and Theory"
+                                class="journal-cover-full">
+                        </div>
+                    </article>
+
+                    <article class="pub-item-full">
+                        <div>
+                            <h4><a href="https://doi.org/10.1016/j.jmrt.2023.01.067" target="_blank"
+                                    rel="noopener noreferrer">Processing parameters optimization in hot forging of AISI
+                                    4340 steel using instability map and reinforcement learning</a></h4>
+                            <p class="pub-authors"><strong>Jeong, H.Y.</strong>, Park, J., Kim, Y., Shin, S.Y., and Kim,
+                                N.*</p>
+                            <p class="pub-journal">Journal of Materials Research and Technology, 23, pp.1995–2009, 2023
+                            </p>
+                            <div class="pub-badges">
+                                <span class="pub-badge">SCIE</span>
+                            </div>
+                        </div>
+                        <div class="pub-cover-full">
+                            <img src="figures/journal/JMRT.jpg" alt="Journal of Materials Research and Technology"
+                                class="journal-cover-full">
+                        </div>
+                    </article>
+
+                    <article class="pub-item-full">
+                        <div>
+                            <h4><a href="https://doi.org/10.1016/j.trc.2022.103831" target="_blank"
+                                    rel="noopener noreferrer">Optimal scheduling and quantitative analysis for
+                                    multi-flying warehouse scheduling problem: Amazon airborne fulfillment center</a>
+                            </h4>
+                            <p class="pub-authors"><strong>Jeong, H.Y.</strong>, Song, B.D.*, and Lee, S.</p>
+                            <p class="pub-journal">Transportation Research Part C: Emerging Technologies, 143, p.103831,
+                                2022</p>
+                            <div class="pub-badges">
+                                <span class="pub-badge">SCIE</span>
+                            </div>
+                        </div>
+                        <div class="pub-cover-full">
+                            <img src="figures/journal/TRC.jpg" alt="Transportation Research Part C"
+                                class="journal-cover-full">
+                        </div>
+                    </article>
+
+                    <article class="pub-item-full">
+                        <div>
+                            <h4><a href="https://doi.org/10.1109/TITS.2020.3049012" target="_blank"
+                                    rel="noopener noreferrer">The flying warehouse delivery system: A quantitative
+                                    approach for the optimal operation policy of airborne fulfillment center</a></h4>
+                            <p class="pub-authors"><strong>Jeong, H.Y.</strong>, Song, B.D.*, and Lee, S.</p>
+                            <p class="pub-journal">IEEE Transactions on Intelligent Transportation Systems, 22(12),
+                                pp.7521–7530, 2020</p>
+                            <div class="pub-badges">
+                                <span class="pub-badge">SCIE</span>
+                            </div>
+                        </div>
+                        <div class="pub-cover-full">
+                            <img src="figures/journal/IEEETITS.jpg"
+                                alt="IEEE Transactions on Intelligent Transportation Systems"
+                                class="journal-cover-full">
+                        </div>
+                    </article>
+
+                    <article class="pub-item-full">
+                        <div>
+                            <h4><a href="https://doi.org/10.1016/j.tre.2020.101901" target="_blank"
+                                    rel="noopener noreferrer">The humanitarian flying warehouse</a></h4>
+                            <p class="pub-authors"><strong>Jeong, H.Y.</strong>, David, J.Y., Min, B.C., and Lee, S.*
+                            </p>
+                            <p class="pub-journal">Transportation Research Part E: Logistics and Transportation Review,
+                                136, p.101901, 2020</p>
+                            <div class="pub-badges">
+                                <span class="pub-badge">SCIE</span>
+                            </div>
+                        </div>
+                        <div class="pub-cover-full">
+                            <img src="figures/journal/TRE.jpg" alt="Transportation Research Part E"
+                                class="journal-cover-full">
+                        </div>
+                    </article>
+
+                    <article class="pub-item-full">
+                        <div>
+                            <h4>Truck-drone hybrid delivery routing: Payload-energy dependency and No-Fly zones</h4>
+                            <p class="pub-authors"><strong>Jeong, H.Y.</strong>, Song, B.D.*, and Lee, S.</p>
+                            <p class="pub-journal">International Journal of Production Economics, 214, pp.220–233, 2019
+                            </p>
+                            <div class="pub-badges">
+                                <span class="pub-badge">SCIE</span>
+                            </div>
+                        </div>
+                        <div class="pub-cover-full">
+                            <img src="figures/journal/IJPE.jpg" alt="International Journal of Production Economics"
+                                class="journal-cover-full">
+                        </div>
+                    </article>
+                </div>
+            </div>
+
+            <!-- Patents -->
+            <div class="pub-section">
+                <h3 class="pub-section-title">특허</h3>
+                <div class="publications-full-list">
+                    <article class="pub-item-full">
+                        <div>
+                            <h4><a href="memebers/HYJeong/patent/1020230071207A.pdf" target="_blank"
+                                    rel="noopener noreferrer">강화 학습 기반의 가공 지도를 이용한 단조 공정의 제어변수를 최적화하기 위한 장치 및 이를 위한
+                                    방법</a></h4>
+                            <p class="pub-authors">Kim, N., and <strong>Jeong, H.Y.</strong></p>
+                            <p class="pub-journal">Korean Patent No. 10-2023-0071207</p>
+                            <div class="pub-badges">
+                                <span class="pub-badge">Pending</span>
+                            </div>
+                        </div>
+                        <div class="pub-cover-full">
+                            <img src="figures/patent/1020230071207A.png" alt="Patent 10-2023-0071207"
+                                class="journal-cover-full">
+                        </div>
+                    </article>
+                </div>
+            </div>
+
+            <!-- Conference Papers -->
+            <div class="pub-section">
+                <h3 class="pub-section-title">학회 논문</h3>
+                <div class="publications-full-list">
+                    <article class="pub-item-full">
+                        <div>
+                            <h4><a href="https://ssrn.com/abstract=4168513" target="_blank"
+                                    rel="noopener noreferrer">Last-Mile Delivery Capacity Building in Pandemics
+                                    Utilizing Community Resources</a></h4>
+                            <p class="pub-authors">Kim, B., <strong>Jeong, H.Y.</strong>, and Lee, S.</p>
+                            <p class="pub-journal">Available at SSRN 4168513</p>
+                            <div class="pub-badges">
+                                <span class="pub-badge conference">Conference Paper</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="pub-item-full">
+                        <div>
+                            <h4><a href="https://doi.org/10.1007/978-3-030-85906-0_5" target="_blank"
+                                    rel="noopener noreferrer">Drone Delivery Vehicle Routing Problem with Multi-Flight
+                                    Level</a></h4>
+                            <p class="pub-authors">Kim, Y., Jung, H., and Lee, S.</p>
+                            <p class="pub-journal">IFIP International Conference on Advances in Production Management
+                                Systems, August 2021. Cham: Springer International Publishing, pp. 43–51</p>
+                            <div class="pub-badges">
+                                <span class="pub-badge conference">Conference Paper</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="pub-item-full">
+                        <div>
+                            <h4><a href="https://doi.org/10.1007/978-3-030-85906-0_4" target="_blank"
+                                    rel="noopener noreferrer">Collaborative Hybrid Delivery System: Drone Routing
+                                    Problem Assisted by Truck</a></h4>
+                            <p class="pub-authors"><strong>Jeong, H.Y.</strong>, and Lee, S.</p>
+                            <p class="pub-journal">Advances in Production Management Systems. Artificial Intelligence
+                                for Sustainable and Resilient Production Systems: IFIP WG 5.7 International Conference,
+                                APMS 2021, Nantes, France, September 5–9, 2021, Proceedings, Part III. Springer
+                                International Publishing, pp. 33–42</p>
+                            <div class="pub-badges">
+                                <span class="pub-badge conference">Conference Paper</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="pub-item-full">
+                        <div>
+                            <h4><a href="https://ssrn.com/abstract=4588071" target="_blank"
+                                    rel="noopener noreferrer">Optimizing Process Parameters for Hot Closed Forging of
+                                    Ti-6242 Alloy: A Machine Learning and FEM Simulation Approach</a></h4>
+                            <p class="pub-authors">Kim, Y., <strong>Jeong, H.Y.</strong>, Park, J., Kim, K., Kwon, H.,
+                                Ju, G., and Kim, N.</p>
+                            <p class="pub-journal">Available at SSRN 4588071</p>
+                            <div class="pub-badges">
+                                <span class="pub-badge conference">Conference Paper</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="pub-item-full">
+                        <div>
+                            <h4><a href="https://doi.org/10.1016/j.promfg.2020.01.318" target="_blank"
+                                    rel="noopener noreferrer">Movable Unmanned Aerial System: Optimization of System,
+                                    Resource Design and Drone Routing</a></h4>
+                            <p class="pub-authors">Song, B.D., Jun, S., Jung, H.Y., and Lee, S.</p>
+                            <p class="pub-journal">Procedia Manufacturing, 39, pp.300–306, 2019</p>
+                            <div class="pub-badges">
+                                <span class="pub-badge conference">Conference Paper</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="pub-item-full">
+                        <div>
+                            <h4><a href="https://doi.org/10.1016/j.promfg.2020.01.319" target="_blank"
+                                    rel="noopener noreferrer">Optimization of Vehicle-Carrier Routing: Mathematical
+                                    Model and Comparison with Related Routing Models</a></h4>
+                            <p class="pub-authors"><strong>Jeong, H.Y.</strong>, and Lee, S.</p>
+                            <p class="pub-journal">Procedia Manufacturing, 39, pp.307–313, 2019</p>
+                            <div class="pub-badges">
+                                <span class="pub-badge conference">Conference Paper</span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+
+            <!-- Conference Presentations -->
+            <div class="pub-section">
+                <h3 class="pub-section-title">학회 발표</h3>
+                <div class="publications-full-list">
+                    <article class="pub-item-full">
+                        <div>
+                            <h4>Airship-based drone delivery system: Quantitative approach for managerial and
+                                operational guidelines</h4>
+                            <p class="pub-authors"><strong>Jeong, H.Y.</strong>, and Lee, S.</p>
+                            <p class="pub-journal">INFORMS Annual Meeting, Seattle, US, 2019</p>
+                            <div class="pub-badges">
+                                <span class="pub-badge conference">Conference Presentation</span>
+                            </div>
+                        </div>
+                        <div class="pub-cover-full">
+                            <img src="figures/conference/informs.png" alt="INFORMS" class="journal-cover-full">
+                        </div>
+                    </article>
+
+                    <article class="pub-item-full">
+                        <div>
+                            <h4>Optimization of Vehicle-Carrier Routing Mathematical Model and Comparison with Related
+                                Routing Models</h4>
+                            <p class="pub-authors"><strong>Jeong, H.Y.</strong>, and Lee, S.</p>
+                            <p class="pub-journal">International Conference on Production Research 25th (ICPR25),
+                                Chicago, US, 2019</p>
+                            <div class="pub-badges">
+                                <span class="pub-badge conference">Conference Presentation</span>
+                            </div>
+                        </div>
+                        <div class="pub-cover-full">
+                            <img src="figures/conference/ICPR25.jfif" alt="ICPR25" class="journal-cover-full">
+                        </div>
+                    </article>
+
+                    <article class="pub-item-full">
+                        <div>
+                            <h4>Movable Unmanned Aerial System Optimization of System Resource Design and Drone Routing
+                            </h4>
+                            <p class="pub-authors">Song, B.D., Jun, S., <strong>Jeong, H.Y.</strong>, and Lee, S.</p>
+                            <p class="pub-journal">International Conference on Production Research 25th (ICPR25),
+                                Chicago, US, 2019</p>
+                            <div class="pub-badges">
+                                <span class="pub-badge conference">Conference Presentation</span>
+                            </div>
+                        </div>
+                        <div class="pub-cover-full">
+                            <img src="figures/conference/ICPR25.jfif" alt="ICPR25" class="journal-cover-full">
+                        </div>
+                    </article>
+
+                    <article class="pub-item-full">
+                        <div>
+                            <h4>Vehicle-Carrier Routing Problem</h4>
+                            <p class="pub-authors"><strong>Jeong, H.Y.</strong>, and Lee, S.</p>
+                            <p class="pub-journal">INFORMS Annual Meeting, Phoenix, US, 2018</p>
+                            <div class="pub-badges">
+                                <span class="pub-badge conference">Conference Presentation</span>
+                            </div>
+                        </div>
+                        <div class="pub-cover-full">
+                            <img src="figures/conference/informs.png" alt="INFORMS" class="journal-cover-full">
+                        </div>
+                    </article>
+
+                    <article class="pub-item-full">
+                        <div>
+                            <h4>Scheduling Hybrid Delivery System of Truck and Drone: Energy-Payload Dependency and
+                                No-Fly Zone</h4>
+                            <p class="pub-authors"><strong>Jeong, H.Y.</strong>, and Lee, S.</p>
+                            <p class="pub-journal">IISE Annual Meeting, Orlando, US, 2018</p>
+                            <div class="pub-badges">
+                                <span class="pub-badge conference">Conference Presentation</span>
+                            </div>
+                        </div>
+                        <div class="pub-cover-full">
+                            <img src="figures/conference/IISE.png" alt="IISE" class="journal-cover-full">
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="index.html" class="nav-logo">
+                        <span class="logo-text">OR</span><span class="logo-accent">LAB</span>
+                    </a>
+                    <p>Operations Research Laboratory<br>Korea University</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-col">
+                        <h4>빠른 링크</h4>
+                        <a href="index.html#about">소개</a>
+                        <a href="index.html#research">연구분야</a>
+                        <a href="index.html#publications">논문</a>
+                        <a href="index.html#projects">연구과제</a>
+                        <a href="index.html#team">연구진</a>
+                    </div>
+                    <div class="footer-col">
+                        <h4>자료</h4>
+                        <a href="#">GitHub</a>
+                        <a href="#">Google Scholar</a>
+                        <a href="#">ResearchGate</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 ORLAB. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

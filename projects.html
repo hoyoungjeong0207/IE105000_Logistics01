@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>연구과제 - Operations Research Laboratory</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--accent-primary);
+            font-size: 0.85rem;
+            margin-bottom: 30px;
+            transition: all var(--transition-fast);
+            text-decoration: none;
+        }
+        
+        .back-link:hover {
+            transform: translateX(-3px);
+        }
+        
+        .back-link svg {
+            width: 14px;
+            height: 14px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="nav-logo">
+                <span class="logo-text">OR</span><span class="logo-accent">LAB</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="index.html#about" class="nav-link">About</a></li>
+                <li><a href="index.html#research" class="nav-link">Research</a></li>
+                <li><a href="index.html#publications" class="nav-link">Publications</a></li>
+                <li><a href="index.html#projects" class="nav-link">Projects</a></li>
+                <li><a href="index.html#team" class="nav-link">Team</a></li>
+                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <button class="nav-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Projects Page -->
+    <section class="section projects-page">
+        <div class="container">
+            <a href="index.html" class="back-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                홈으로
+            </a>
+            
+            <div class="section-header">
+                <span class="section-tag">연구과제</span>
+                <h2 class="section-title">전체 <span class="highlight">연구과제</span></h2>
+            </div>
+
+            <div class="projects-timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-main">
+                            <div class="timeline-text">
+                                <span class="timeline-period">2025.06 ~ 2028.05</span>
+                                <h4>V2G 기반 스마트 물류-전력망 통합 운영 최적화 연구</h4>
+                                <p>전기차가 소비 주체를 넘어 에너지 조절 자원으로 기능하는 상황을 전제로, 물류 네트워크의 운영 의사결정과 전력 계통의 안정적 관리를 하나의 최적화 틀에서 통합하여 비용 효율성·계통 안정성·지속가능성을 동시에 달성할 수 있는 통합 운영 전략을 제시하는 연구</p>
+                                <span class="timeline-funder">한국연구재단 · 연구책임자</span>
+                            </div>
+                            <div class="timeline-logo">
+                                <img src="figures/project/NRF.svg" alt="한국연구재단" class="org-logo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-main">
+                            <div class="timeline-text">
+                                <span class="timeline-period">2026.01 ~ 2026.12</span>
+                                <h4>실시간 동적 가격 반응형 EV 물류–배전망 통합 운영 모형(EVRP–OPF) 정립에 관한 연구</h4>
+                                <p>실시간 전력요금 신호를 내재화하여 EV 물류 경로·충방전 의사결정과 배전망 최적화(OPF)를 연계하고, 이를 통해 물류 비용과 전력 계통 부담을 동시에 최소화하는 통합 운영 최적화 프레임워크를 정립하는 연구</p>
+                                <span class="timeline-funder">정석물류학술재단 · 연구책임자</span>
+                            </div>
+                            <div class="timeline-logo">
+                                <img src="figures/project/jungseok.jpg" alt="정석물류학술재단" class="org-logo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-main">
+                            <div class="timeline-text">
+                                <span class="timeline-period">2023 ~ 현재</span>
+                                <h4>Real-time last mile delivery system using collaborative ground-aerial movable stations: Theory, algorithm and application</h4>
+                                <p>실시간 라스트마일 배송 시스템 개발을 위한 지상-공중 이동 기지 협업 시스템의 이론, 알고리즘 및 응용 연구</p>
+                                <span class="timeline-funder">한국연구재단</span>
+                            </div>
+                            <div class="timeline-logo">
+                                <img src="figures/project/NRF.svg" alt="한국연구재단" class="org-logo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-main">
+                            <div class="timeline-text">
+                                <span class="timeline-period">2023</span>
+                                <h4>Development of multipoint servocontrol die cushion and process monitoring module for improving the press forming quality</h4>
+                                <p>프레스 성형 품질 향상을 위한 다점 서보 제어 다이 쿠션 및 공정 모니터링 모듈 개발</p>
+                                <span class="timeline-funder">산업통상자원부 · <strong>(주)한빛산업</strong></span>
+                            </div>
+                            <div class="timeline-logo">
+                                <img src="figures/project/산자부.png" alt="산업통상자원부" class="org-logo">
+                                <img src="figures/project/한빛.png" alt="(주)한빛산업" class="org-logo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-main">
+                            <div class="timeline-text">
+                                <span class="timeline-period">2023</span>
+                                <h4>Development of motor housing for high-quality electric vehicles through the application of high-function intelligent molds</h4>
+                                <p>고기능 지능형 금형 적용을 통한 고품질 전기차 모터 하우징 개발</p>
+                                <span class="timeline-funder">중소벤처기업부 · <strong>(주)대국정공</strong></span>
+                            </div>
+                            <div class="timeline-logo">
+                                <img src="figures/project/중소벤처기업부.png" alt="중소벤처기업부" class="org-logo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-main">
+                            <div class="timeline-text">
+                                <span class="timeline-period">2023</span>
+                                <h4>Development of material forging and manufacturing process technology to improve the mechanical properties of the core parts of the reducer</h4>
+                                <p>감속기 핵심 부품의 기계적 특성 향상을 위한 소재 단조 및 제조 공정 기술 개발</p>
+                                <span class="timeline-funder">산업통상자원부 · <strong>(주)케이피에프충주공장</strong></span>
+                            </div>
+                            <div class="timeline-logo">
+                                <img src="figures/project/산자부.png" alt="산업통상자원부" class="org-logo">
+                                <img src="figures/project/케이피에프.jpg" alt="(주)케이피에프충주공장" class="org-logo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-main">
+                            <div class="timeline-text">
+                                <span class="timeline-period">2023</span>
+                                <h4>Development of vibration insulation products using hybrid materials for powertrain mount systems</h4>
+                                <p>파워트레인 마운트 시스템용 하이브리드 소재를 활용한 진동 절연 제품 개발</p>
+                                <span class="timeline-funder">산업통상자원부 · <strong>(주)코다코</strong></span>
+                            </div>
+                            <div class="timeline-logo">
+                                <img src="figures/project/산자부.png" alt="산업통상자원부" class="org-logo">
+                                <img src="figures/project/코다코.gif" alt="(주)코다코" class="org-logo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-main">
+                            <div class="timeline-text">
+                                <span class="timeline-period">2022</span>
+                                <h4>Development of multipoint servocontrol die cushion and monitoring module</h4>
+                                <p>다점 서보 제어 다이 쿠션 및 모니터링 모듈 개발</p>
+                                <span class="timeline-funder">산업통상자원부 · <strong>(주)한빛산업</strong></span>
+                            </div>
+                            <div class="timeline-logo">
+                                <img src="figures/project/산자부.png" alt="산업통상자원부" class="org-logo">
+                                <img src="figures/project/한빛.png" alt="(주)한빛산업" class="org-logo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-main">
+                            <div class="timeline-text">
+                                <span class="timeline-period">2022</span>
+                                <h4>Development of manufacturing technology for multilateral body parts</h4>
+                                <p>다각형 차체 부품 제조 기술 개발</p>
+                                <span class="timeline-funder">산업통상자원부 · <strong>(주)새한산업</strong></span>
+                            </div>
+                            <div class="timeline-logo">
+                                <img src="figures/project/산자부.png" alt="산업통상자원부" class="org-logo">
+                                <img src="figures/project/세한.jpg" alt="(주)새한산업" class="org-logo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-main">
+                            <div class="timeline-text">
+                                <span class="timeline-period">2022</span>
+                                <h4>Forging and process technology to improve reducer component strength</h4>
+                                <p>감속기 부품 강도 향상을 위한 단조 및 공정 기술</p>
+                                <span class="timeline-funder">산업통상자원부 · <strong>(주)케이피에프충주공장</strong></span>
+                            </div>
+                            <div class="timeline-logo">
+                                <img src="figures/project/산자부.png" alt="산업통상자원부" class="org-logo">
+                                <img src="figures/project/케이피에프.jpg" alt="(주)케이피에프충주공장" class="org-logo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-main">
+                            <div class="timeline-text">
+                                <span class="timeline-period">2022</span>
+                                <h4>High-performance powertrain housing using intelligent mold tech</h4>
+                                <p>지능형 금형 기술을 활용한 고성능 파워트레인 하우징</p>
+                                <span class="timeline-funder">산업통상자원부 · <strong>(주)코넥</strong></span>
+                            </div>
+                            <div class="timeline-logo">
+                                <img src="figures/project/산자부.png" alt="산업통상자원부" class="org-logo">
+                                <img src="figures/project/코넥.jpg" alt="(주)코넥" class="org-logo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-main">
+                            <div class="timeline-text">
+                                <span class="timeline-period">2022</span>
+                                <h4>Hybrid vibration proof system development for PBV powertrain mounts</h4>
+                                <p>PBV 파워트레인 마운트용 하이브리드 진동 방지 시스템 개발</p>
+                                <span class="timeline-funder">산업통상자원부 · <strong>(주)코다코</strong></span>
+                            </div>
+                            <div class="timeline-logo">
+                                <img src="figures/project/산자부.png" alt="산업통상자원부" class="org-logo">
+                                <img src="figures/project/코다코.gif" alt="(주)코다코" class="org-logo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-main">
+                            <div class="timeline-text">
+                                <span class="timeline-period">2019 ~ 2022</span>
+                                <h4>Visualization of Repair Operations Management for Networked Systems Resilience</h4>
+                                <p>네트워크 시스템 회복력을 위한 수리 운영 관리 시각화</p>
+                                <span class="timeline-funder">Navy Crane Center, U.S.</span>
+                            </div>
+                            <div class="timeline-logo">
+                                <img src="figures/project/navycranecenter.png" alt="Navy Crane Center" class="org-logo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-main">
+                            <div class="timeline-text">
+                                <span class="timeline-period">2018 ~ 2019</span>
+                                <h4>Resilience in Networked Systems using collaboration (RNSC) Project</h4>
+                                <p>협업을 활용한 네트워크 시스템 회복력 (RNSC) 프로젝트</p>
+                                <span class="timeline-funder">Navy Crane Center, U.S.</span>
+                            </div>
+                            <div class="timeline-logo">
+                                <img src="figures/project/navycranecenter.png" alt="Navy Crane Center" class="org-logo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="index.html" class="nav-logo">
+                        <span class="logo-text">OR</span><span class="logo-accent">LAB</span>
+                    </a>
+                    <p>Operations Research Laboratory<br>Korea University</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-col">
+                        <h4>빠른 링크</h4>
+                        <a href="index.html#about">소개</a>
+                        <a href="index.html#research">연구분야</a>
+                        <a href="index.html#publications">논문</a>
+                        <a href="index.html#projects">연구과제</a>
+                        <a href="index.html#team">연구진</a>
+                    </div>
+                    <div class="footer-col">
+                        <h4>자료</h4>
+                        <a href="#">GitHub</a>
+                        <a href="#">Google Scholar</a>
+                        <a href="#">ResearchGate</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 ORLAB. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

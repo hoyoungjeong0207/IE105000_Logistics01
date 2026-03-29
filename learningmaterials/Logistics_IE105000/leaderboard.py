@@ -80,11 +80,11 @@ pre_chain  = params.get("chain",  "")
 
 # ── Tab navigation ─────────────────────────────────────────────────────────────
 
-TABS = ["🎮 Game", "🏆 Leaderboard", "📤 Submit Score", "🔐 Admin"]
+TABS = ["🎮 Game", "🏆 Leaderboard", "🔐 Admin"]
 
-# If score data is passed via URL, default to Submit tab
+# If score data is passed via URL, go to Leaderboard tab for name entry
 if "tab" not in st.session_state:
-    st.session_state.tab = "📤 Submit Score" if pre_profit else "🎮 Game"
+    st.session_state.tab = "🏆 Leaderboard" if pre_profit else "🎮 Game"
 
 st.title("🌐 Global Logistics Game")
 
@@ -125,10 +125,27 @@ if st.session_state.tab == "🎮 Game":
     components.html(game_html, height=680, scrolling=False)
 
 # ══════════════════════════════════════════════════════════════════════════════
-# 🏆  LEADERBOARD
+# 🏆  LEADERBOARD  (+ inline submit form when score data is present)
 # ══════════════════════════════════════════════════════════════════════════════
 
 elif st.session_state.tab == "🏆 Leaderboard":
+    # ── Inline submit form (shown only when score data arrives from game) ──────
+    if pre_profit:
+        st.info(f"🎮 Game result: **${int(pre_profit):,}** profit · **{pre_units}** units · {pre_chain}")
+        with st.form("submit_form"):
+            name = st.text_input("Your Name", placeholder="Enter your name to register score")
+            submitted = st.form_submit_button("🏆 Register to Leaderboard", use_container_width=True)
+            if submitted:
+                if not name.strip():
+                    st.error("Please enter your name.")
+                else:
+                    add_score(name, int(pre_profit), int(pre_units) if pre_units else 0, pre_chain)
+                    st.success(f"✅ Registered! **{name}** — ${int(pre_profit):,}")
+                    st.balloons()
+                    st.query_params.clear()
+                    st.rerun()
+        st.divider()
+
     df = get_scores()
     if df.empty:
         st.info("No scores yet. Play the game and submit your result!")
@@ -160,37 +177,6 @@ elif st.session_state.tab == "🏆 Leaderboard":
         c1.metric("Submissions", len(df))
         c2.metric("Best Profit", fmt_profit(df["profit"].max()))
         c3.metric("Average Profit", fmt_profit(int(df["profit"].mean())))
-
-# ══════════════════════════════════════════════════════════════════════════════
-# 📤  SUBMIT
-# ══════════════════════════════════════════════════════════════════════════════
-
-elif st.session_state.tab == "📤 Submit Score":
-    st.subheader("Submit Your Score")
-
-    if pre_profit:
-        st.success(f"Score from game: **${int(pre_profit):,}** profit, **{pre_units}** units")
-
-    with st.form("submit_form", clear_on_submit=True):
-        name   = st.text_input("Your Name", placeholder="Enter your name")
-        profit = st.number_input("Net Profit ($)", value=int(pre_profit) if pre_profit else 0, step=1)
-        units  = st.number_input("Units Sold", value=int(pre_units) if pre_units else 0, step=1, min_value=0)
-        chain  = st.text_input("Supply Chain", value=pre_chain,
-                               placeholder="e.g. Africa Mine → Asia Factory → Europe Hub")
-
-        submitted = st.form_submit_button("🏆 Submit to Leaderboard", use_container_width=True)
-
-        if submitted:
-            if not name.strip():
-                st.error("Please enter your name.")
-            else:
-                add_score(name, profit, units, chain)
-                st.success(f"✅ Submitted! **{name}** — Net Profit: **${profit:,}**")
-                st.balloons()
-                # Clear URL params and switch to leaderboard
-                st.query_params.clear()
-                st.session_state.tab = "🏆 Leaderboard"
-                st.rerun()
 
 # ══════════════════════════════════════════════════════════════════════════════
 # 🔐  ADMIN

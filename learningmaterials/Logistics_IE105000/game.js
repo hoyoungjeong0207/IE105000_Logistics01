@@ -507,8 +507,9 @@ function submitScore(result) {
     chain:  chainParts.join(' | '),
   });
 
-  window.open(`${url}/?${params}`, '_blank');
-  toast('🏆 Opening leaderboard — enter your name there!');
+  // Navigate parent Streamlit window to submit tab (no new tab)
+  window.top.location.href = `${url}/?${params}`;
+  toast('🏆 Submitting score…');
 }
 
 // ── Leaderboard overlay ───────────────────────────────────────────────────────

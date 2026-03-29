@@ -74,29 +74,40 @@ def delete_all():
 # ── URL pre-fill ───────────────────────────────────────────────────────────────
 
 params     = st.query_params
-pre_name   = params.get("name",   "")
 pre_profit = params.get("profit", "")
 pre_units  = params.get("units",  "")
 pre_chain  = params.get("chain",  "")
 
-# ── Page ───────────────────────────────────────────────────────────────────────
+# ── Tab navigation ─────────────────────────────────────────────────────────────
+
+TABS = ["🎮 Game", "🏆 Leaderboard", "📤 Submit Score", "🔐 Admin"]
+
+# If score data is passed via URL, default to Submit tab
+if "tab" not in st.session_state:
+    st.session_state.tab = "📤 Submit Score" if pre_profit else "🎮 Game"
 
 st.title("🌐 Global Logistics Game")
 
-tab_game, tab_lb, tab_submit, tab_admin = st.tabs(["🎮 Game", "🏆 Leaderboard", "📤 Submit Score", "🔐 Admin"])
+cols = st.columns(len(TABS))
+for col, name in zip(cols, TABS):
+    if col.button(name, use_container_width=True,
+                  type="primary" if st.session_state.tab == name else "secondary"):
+        st.session_state.tab = name
+        st.rerun()
+
+st.divider()
 
 # ══════════════════════════════════════════════════════════════════════════════
 # 🎮  GAME
 # ══════════════════════════════════════════════════════════════════════════════
 
-with tab_game:
+if st.session_state.tab == "🎮 Game":
     here = Path(__file__).parent
     style_css  = (here / "style.css").read_text(encoding="utf-8")
     config_js  = (here / "config.js").read_text(encoding="utf-8")
     game_js    = (here / "game.js").read_text(encoding="utf-8")
     index_html = (here / "index.html").read_text(encoding="utf-8")
 
-    # Inline CSS and JS so no external file references needed
     game_html = index_html
     game_html = game_html.replace(
         '<link rel="stylesheet" href="style.css" />',
@@ -117,7 +128,7 @@ with tab_game:
 # 🏆  LEADERBOARD
 # ══════════════════════════════════════════════════════════════════════════════
 
-with tab_lb:
+elif st.session_state.tab == "🏆 Leaderboard":
     df = get_scores()
     if df.empty:
         st.info("No scores yet. Play the game and submit your result!")
@@ -154,14 +165,14 @@ with tab_lb:
 # 📤  SUBMIT
 # ══════════════════════════════════════════════════════════════════════════════
 
-with tab_submit:
+elif st.session_state.tab == "📤 Submit Score":
     st.subheader("Submit Your Score")
 
     if pre_profit:
-        st.success(f"Score detected from game: **${int(pre_profit):,}** profit, **{pre_units}** units")
+        st.success(f"Score from game: **${int(pre_profit):,}** profit, **{pre_units}** units")
 
     with st.form("submit_form", clear_on_submit=True):
-        name   = st.text_input("Your Name", value=pre_name, placeholder="Enter your name")
+        name   = st.text_input("Your Name", placeholder="Enter your name")
         profit = st.number_input("Net Profit ($)", value=int(pre_profit) if pre_profit else 0, step=1)
         units  = st.number_input("Units Sold", value=int(pre_units) if pre_units else 0, step=1, min_value=0)
         chain  = st.text_input("Supply Chain", value=pre_chain,
@@ -176,12 +187,16 @@ with tab_submit:
                 add_score(name, profit, units, chain)
                 st.success(f"✅ Submitted! **{name}** — Net Profit: **${profit:,}**")
                 st.balloons()
+                # Clear URL params and switch to leaderboard
+                st.query_params.clear()
+                st.session_state.tab = "🏆 Leaderboard"
+                st.rerun()
 
 # ══════════════════════════════════════════════════════════════════════════════
 # 🔐  ADMIN
 # ══════════════════════════════════════════════════════════════════════════════
 
-with tab_admin:
+elif st.session_state.tab == "🔐 Admin":
     pwd = st.text_input("Admin Password", type="password", key="admin_pwd")
 
     if pwd == ADMIN_PASSWORD:
@@ -194,7 +209,6 @@ with tab_admin:
             if df.empty:
                 st.info("No submissions yet.")
             else:
-                # Bulk delete
                 col_bulk1, col_bulk2 = st.columns([4, 1])
                 with col_bulk2:
                     if st.button("🗑️ Delete ALL", type="secondary", use_container_width=True):
@@ -207,10 +221,10 @@ with tab_admin:
                     with st.expander(f"#{int(row['id'])}  {row['name']}  |  ${int(row['profit']):,}  |  {row['chain']}"):
                         c1, c2 = st.columns([3, 1])
                         with c1:
-                            n_name   = st.text_input("Name",        value=row["name"],           key=f"n_{row['id']}")
-                            n_profit = st.number_input("Profit",    value=int(row["profit"]),    key=f"p_{row['id']}")
-                            n_units  = st.number_input("Units",     value=int(row["units"] or 0),key=f"u_{row['id']}")
-                            n_chain  = st.text_input("Chain",       value=row["chain"] or "",    key=f"c_{row['id']}")
+                            n_name   = st.text_input("Name",   value=row["name"],            key=f"n_{row['id']}")
+                            n_profit = st.number_input("Profit", value=int(row["profit"]),   key=f"p_{row['id']}")
+                            n_units  = st.number_input("Units",  value=int(row["units"] or 0),key=f"u_{row['id']}")
+                            n_chain  = st.text_input("Chain",  value=row["chain"] or "",     key=f"c_{row['id']}")
                         with c2:
                             st.write("")
                             st.write("")
@@ -226,7 +240,6 @@ with tab_admin:
             st.subheader("Game Config Editor")
             st.info("Edit values below, then click **Generate config.js** and commit the file to GitHub.")
 
-            # Default values matching current config.js
             DEFAULT_REGIONS = {
                 "NorthAmerica": {"label":"North America","demand":120,"marketPrice":200,"mapPos":{"x":24,"y":32},
                     "mine":{"buildCost":100000,"opCostPerUnit":115,"outputPerPeriod":80},
@@ -262,29 +275,28 @@ with tab_admin:
                 st.session_state.cfg = {k: dict(v) for k, v in DEFAULT_REGIONS.items()}
 
             cfg = st.session_state.cfg
-
             budget = st.number_input("Starting Budget ($)", value=500_000, step=10_000)
 
             for rid, rdata in cfg.items():
                 with st.expander(f"🌍 {rdata['label']}"):
                     cc1, cc2 = st.columns(2)
                     with cc1:
-                        cfg[rid]["demand"]      = st.number_input("Demand (units)",   value=rdata["demand"],      key=f"{rid}_d",  step=10)
+                        cfg[rid]["demand"]      = st.number_input("Demand (units)",       value=rdata["demand"],      key=f"{rid}_d",  step=10)
                         cfg[rid]["marketPrice"] = st.number_input("Market Price ($/unit)", value=rdata["marketPrice"], key=f"{rid}_mp", step=5)
                     with cc2:
                         st.write("")
 
                     st.markdown("**⛏️ Mine**")
                     m1, m2, m3 = st.columns(3)
-                    cfg[rid]["mine"]["buildCost"]      = m1.number_input("Build Cost",    value=rdata["mine"]["buildCost"],      key=f"{rid}_mb",  step=5000)
-                    cfg[rid]["mine"]["opCostPerUnit"]  = m2.number_input("Op Cost/unit",  value=rdata["mine"]["opCostPerUnit"],  key=f"{rid}_mo",  step=5)
-                    cfg[rid]["mine"]["outputPerPeriod"]= m3.number_input("Max Output",    value=rdata["mine"]["outputPerPeriod"],key=f"{rid}_mout",step=10)
+                    cfg[rid]["mine"]["buildCost"]       = m1.number_input("Build Cost",   value=rdata["mine"]["buildCost"],       key=f"{rid}_mb",  step=5000)
+                    cfg[rid]["mine"]["opCostPerUnit"]   = m2.number_input("Op Cost/unit", value=rdata["mine"]["opCostPerUnit"],   key=f"{rid}_mo",  step=5)
+                    cfg[rid]["mine"]["outputPerPeriod"] = m3.number_input("Max Output",   value=rdata["mine"]["outputPerPeriod"], key=f"{rid}_mout",step=10)
 
                     st.markdown("**🏭 Factory**")
                     f1, f2, f3 = st.columns(3)
-                    cfg[rid]["factory"]["buildCost"]      = f1.number_input("Build Cost",   value=rdata["factory"]["buildCost"],      key=f"{rid}_fb",  step=5000)
-                    cfg[rid]["factory"]["opCostPerUnit"]  = f2.number_input("Op Cost/unit", value=rdata["factory"]["opCostPerUnit"],  key=f"{rid}_fo",  step=5)
-                    cfg[rid]["factory"]["outputPerPeriod"]= f3.number_input("Max Output",   value=rdata["factory"]["outputPerPeriod"],key=f"{rid}_fout",step=10)
+                    cfg[rid]["factory"]["buildCost"]       = f1.number_input("Build Cost",   value=rdata["factory"]["buildCost"],       key=f"{rid}_fb",  step=5000)
+                    cfg[rid]["factory"]["opCostPerUnit"]   = f2.number_input("Op Cost/unit", value=rdata["factory"]["opCostPerUnit"],   key=f"{rid}_fo",  step=5)
+                    cfg[rid]["factory"]["outputPerPeriod"] = f3.number_input("Max Output",   value=rdata["factory"]["outputPerPeriod"], key=f"{rid}_fout",step=10)
 
                     st.markdown("**🏪 Sales Hub**")
                     h1, h2 = st.columns(2)
@@ -330,9 +342,9 @@ with tab_admin:
   },
 };\n''')
 
-                config_js = "".join(lines)
-                st.code(config_js, language="javascript")
-                st.download_button("⬇️ Download config.js", data=config_js,
+                config_js_out = "".join(lines)
+                st.code(config_js_out, language="javascript")
+                st.download_button("⬇️ Download config.js", data=config_js_out,
                                    file_name="config.js", mime="text/javascript",
                                    use_container_width=True)
 

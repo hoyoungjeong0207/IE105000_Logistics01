@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Global Logistics Game</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ── Header ─────────────────────────────────────────────────────────── -->
+  <header id="header">
+    <div class="header-title">🌐 Global Logistics</div>
+    <div class="header-stats">
+      <span class="stat-box">💰 Budget: <strong id="hud-budget">$500,000</strong></span>
+      <span class="stat-box">📦 Output: <strong id="hud-output">— units</strong></span>
+      <span class="stat-box">📈 Profit: <strong id="hud-profit">$0</strong></span>
+    </div>
+    <button id="btn-leaderboard" class="lb-header-btn">🏆 Leaderboard</button>
+  </header>
+
+  <!-- ── Map (full screen) ──────────────────────────────────────────────── -->
+  <div id="map-container">
+    <img id="map-img"
+      src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/World_map_-_low_resolution.svg/1280px-World_map_-_low_resolution.svg.png"
+      alt="World Map" />
+    <div id="map-pins"></div>
+    <svg id="route-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+
+    <!-- Stage announcement banner -->
+    <div id="announcement">
+      <div id="announcement-text"></div>
+    </div>
+  </div>
+
+  <!-- ── Region popup ──────────────────────────────────────────────────── -->
+  <div id="region-popup" class="hidden">
+    <div id="popup-header">
+      <span id="popup-region-name"></span>
+      <button id="popup-close" onclick="closePopup()">✕</button>
+    </div>
+    <div id="popup-region-stats">
+      <div class="popup-stat"><span>📦 Demand</span><strong id="popup-demand"></strong></div>
+      <div class="popup-stat"><span>💲 Market Price</span><strong id="popup-price"></strong></div>
+    </div>
+    <div id="popup-facility-info"></div>
+    <div id="popup-actions"></div>
+  </div>
+
+  <!-- ── Result overlay ────────────────────────────────────────────────── -->
+  <div id="result-overlay" class="hidden">
+    <div id="result-box">
+      <div id="result-title">Simulation Results</div>
+      <div id="result-rows"></div>
+      <div id="submit-section">
+        <input id="player-name" type="text" placeholder="Enter your name to submit score" maxlength="40" />
+        <button id="btn-submit-score">🏆 Submit to Leaderboard</button>
+      </div>
+      <button id="btn-restart">🔄 Play Again</button>
+    </div>
+  </div>
+
+  <!-- ── Leaderboard overlay ───────────────────────────────────────────── -->
+  <div id="lb-overlay" class="hidden">
+    <div id="lb-box">
+      <div id="lb-header-row">
+        <span id="lb-title">🏆 Leaderboard</span>
+        <button id="lb-close">✕</button>
+      </div>
+      <iframe id="lb-iframe" src="" frameborder="0" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <!-- ── Bottom toolbar (4 buttons) ───────────────────────────────────── -->
+  <div id="toolbar">
+    <button class="tool-btn" id="btn-mine"    data-mode="mine">
+      <span class="tool-emoji">⛏️</span>
+      <span class="tool-label">Mine</span>
+      <span class="tool-cost" id="cost-mine"></span>
+    </button>
+    <button class="tool-btn" id="btn-factory" data-mode="factory">
+      <span class="tool-emoji">🏭</span>
+      <span class="tool-label">Factory</span>
+      <span class="tool-cost" id="cost-factory"></span>
+    </button>
+    <button class="tool-btn" id="btn-salesHub" data-mode="salesHub">
+      <span class="tool-emoji">🏪</span>
+      <span class="tool-label">Sales Hub</span>
+      <span class="tool-cost" id="cost-salesHub"></span>
+    </button>
+    <button class="tool-btn simulate-btn" id="btn-simulate">
+      <span class="tool-emoji">▶</span>
+      <span class="tool-label">Simulate</span>
+    </button>
+  </div>
+
+  <!-- ── Toast ─────────────────────────────────────────────────────────── -->
+  <div id="toast"></div>
+
+  <script src="config.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

@@ -486,9 +486,6 @@ function showResultOverlay(result) {
 }
 
 function submitScore(result) {
-  const name = document.getElementById('player-name').value.trim();
-  if (!name) { toast('Enter your name first!'); return; }
-
   const url = STREAMLIT();
   if (!url || url === 'STREAMLIT_URL') { toast('Leaderboard not configured yet.'); return; }
 
@@ -500,14 +497,13 @@ function submitScore(result) {
   });
 
   const params = new URLSearchParams({
-    name,
     profit: result.netProfit,
     units:  result.rows.reduce((s, r) => s + r.units, 0),
     chain:  chainParts.join(' | '),
   });
 
   window.open(`${url}/?${params}`, '_blank');
-  toast(`🏆 Opening leaderboard for ${name}!`);
+  toast('🏆 Opening leaderboard — enter your name there!');
 }
 
 // ── Leaderboard overlay ───────────────────────────────────────────────────────

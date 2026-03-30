@@ -178,6 +178,35 @@
         padding: 3px 10px;
         border-radius: 20px;
     }
+
+    .course-section {
+        margin-bottom: 48px;
+    }
+
+    .course-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .course-code {
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        color: var(--accent-primary);
+        background: rgba(var(--accent-rgb, 99, 102, 241), 0.1);
+        padding: 4px 12px;
+        border-radius: 20px;
+    }
+
+    .course-name {
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
 </style>
 
 <body>
@@ -220,73 +249,180 @@
                 <h2 class="section-title"><span class="highlight">학습 도구 &amp; 실습 자료</span></h2>
             </div>
 
-            <div class="materials-grid">
-
-                <!-- SCM Final Project Competition Platform -->
-                <div class="material-card">
-                    <div class="material-card-header">
-                        <div class="material-icon">🏭</div>
-                        <div class="material-meta">
-                            <span class="material-tag">Streamlit App · SCM</span>
-                            <div class="material-title">공급망 최적화 경쟁 플랫폼</div>
-                        </div>
+                <!-- ═══ IE315000 공급망관리 ═══ -->
+                <div class="course-section">
+                    <div class="course-header">
+                        <span class="course-code">IE315000</span>
+                        <span class="course-name">공급망관리</span>
                     </div>
-                    <p class="material-description">
-                        공급망 네트워크 설계(시설 개설 결정 + 물류 흐름 + 재고)를 주제로 한 기말 프로젝트 채점 플랫폼입니다.
-                        학생들은 CSV 형식으로 의사결정변수를 제출하고, 실시간 리더보드에서 최적화 결과를 비교할 수 있습니다.
-                    </p>
-                    <ul style="font-size:0.85rem; color: var(--text-secondary); padding-left: 18px; line-height: 1.8; margin: 0;">
-                        <li>공급자 2곳, 후보 시설 3곳, 고객 4곳</li>
-                        <li>이진 변수(시설 개설) + 연속 변수(물류 흐름)</li>
-                        <li>최소 비용 목적함수 · 제약 위반 시 페널티 부과</li>
-                        <li>최고점 10,000점 기준 상대 채점</li>
-                    </ul>
-                    <div class="material-footer">
-                        <span class="material-info">SCM_finalproject_v1 · 2025</span>
-                        <a href="https://ie315000scmtest1-2jcyj3uggbv9p5dcmg8j2b.streamlit.app/" class="material-launch" target="_blank">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
-                                <polyline points="15 3 21 3 21 9" />
-                                <line x1="10" y1="14" x2="21" y2="3" />
-                            </svg>
-                            앱 실행
-                        </a>
+                    <div class="materials-grid">
+
+                        <!-- IE315000 #1 FLP -->
+                        <div class="material-card">
+                            <div class="material-card-header">
+                                <div class="material-icon">🏭</div>
+                                <div class="material-meta">
+                                    <span class="material-tag">Streamlit App · 실습 #1</span>
+                                    <div class="material-title">시설입지 최적화 경쟁 플랫폼</div>
+                                </div>
+                            </div>
+                            <p class="material-description">
+                                공급망 네트워크 설계(시설 개설 결정 + 물류 흐름)를 주제로 한 실습 플랫폼입니다.
+                                CSV 형식으로 의사결정변수를 제출하고 실시간 리더보드에서 최적화 결과를 비교합니다.
+                            </p>
+                            <ul style="font-size:0.85rem; color: var(--text-secondary); padding-left: 18px; line-height: 1.8; margin: 0;">
+                                <li>공급자 2곳, 후보 시설 3곳, 고객 4곳</li>
+                                <li>이진 변수(시설 개설) + 연속 변수(물류 흐름)</li>
+                                <li>최소 비용 목적함수 · 제약 위반 시 페널티 부과</li>
+                                <li>최고점 10,000점 기준 상대 채점</li>
+                            </ul>
+                            <div class="material-footer">
+                                <span class="material-info">IE315000_1_FLP · 2026</span>
+                                <a href="https://ie315000scmtest1-2jcyj3uggbv9p5dcmg8j2b.streamlit.app/" class="material-launch" target="_blank">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
+                                        <polyline points="15 3 21 3 21 9" />
+                                        <line x1="10" y1="14" x2="21" y2="3" />
+                                    </svg>
+                                    앱 실행
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- IE315000 #2 NPV -->
+                        <div class="material-card">
+                            <div class="material-card-header">
+                                <div class="material-icon">📈</div>
+                                <div class="material-meta">
+                                    <span class="material-tag">실습 #2</span>
+                                    <div class="material-title">순현재가치(NPV) 분석</div>
+                                </div>
+                            </div>
+                            <p class="material-description">
+                                투자 의사결정을 위한 순현재가치(NPV) 분석 실습 자료입니다.
+                            </p>
+                            <div class="material-footer">
+                                <span class="material-info">IE315000_2_NPV · 2026</span>
+                                <span class="coming-soon-badge">준비중</span>
+                            </div>
+                        </div>
+
+                        <!-- IE315000 #3 -->
+                        <div class="material-card">
+                            <div class="material-card-header">
+                                <div class="material-icon">📦</div>
+                                <div class="material-meta">
+                                    <span class="material-tag">실습 #3</span>
+                                    <div class="material-title">실습 #3</div>
+                                </div>
+                            </div>
+                            <p class="material-description">
+                                준비 중인 실습 자료입니다.
+                            </p>
+                            <div class="material-footer">
+                                <span class="material-info">IE315000_3 · 2026</span>
+                                <span class="coming-soon-badge">준비중</span>
+                            </div>
+                        </div>
+
+                        <!-- IE315000 Final Project -->
+                        <div class="material-card">
+                            <div class="material-card-header">
+                                <div class="material-icon">🎯</div>
+                                <div class="material-meta">
+                                    <span class="material-tag">Final Project</span>
+                                    <div class="material-title">기말 프로젝트</div>
+                                </div>
+                            </div>
+                            <p class="material-description">
+                                준비 중인 기말 프로젝트 자료입니다.
+                            </p>
+                            <div class="material-footer">
+                                <span class="material-info">IE315000_final · 2026</span>
+                                <span class="coming-soon-badge">준비중</span>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
-                <!-- Global Logistics Game -->
-                <div class="material-card">
-                    <div class="material-card-header">
-                        <div class="material-icon">🌐</div>
-                        <div class="material-meta">
-                            <span class="material-tag">Browser Game · Logistics</span>
-                            <div class="material-title">글로벌 물류 경영 시뮬레이션</div>
-                        </div>
+                <!-- ═══ IE105000 글로벌SCM ═══ -->
+                <div class="course-section">
+                    <div class="course-header">
+                        <span class="course-code">IE105000</span>
+                        <span class="course-name">글로벌SCM</span>
                     </div>
-                    <p class="material-description">
-                        7개 세계 지역에서 광산·공장·판매거점을 건설하고 운송 경로를 설계하여 수익을 극대화하는 교육용 브라우저 게임입니다.
-                        물류 네트워크 설계, 시설 투자 의사결정, 운송비 최적화를 직관적으로 학습할 수 있습니다.
-                    </p>
-                    <ul style="font-size:0.85rem; color: var(--text-secondary); padding-left: 18px; line-height: 1.8; margin: 0;">
-                        <li>7개 세계 지역 · 광산·공장·판매거점 3종 시설</li>
-                        <li>지역별 수요 및 시장가격 차별화</li>
-                        <li>운송 경로 설계 및 비용 계산</li>
-                        <li>5 라운드 기반 손익 시뮬레이션</li>
-                    </ul>
-                    <div class="material-footer">
-                        <span class="material-info">Logistics_IE105000 · 2026</span>
-                        <a href="https://ie105000logistics01-lhbdozzj5ifb59yrewgizq.streamlit.app/" class="material-launch" target="_blank">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
-                                <polyline points="15 3 21 3 21 9" />
-                                <line x1="10" y1="14" x2="21" y2="3" />
-                            </svg>
-                            게임 시작
-                        </a>
+                    <div class="materials-grid">
+
+                        <!-- IE105000 #1 globalSCM -->
+                        <div class="material-card">
+                            <div class="material-card-header">
+                                <div class="material-icon">🌐</div>
+                                <div class="material-meta">
+                                    <span class="material-tag">Browser Game · 실습 #1</span>
+                                    <div class="material-title">글로벌 물류 경영 시뮬레이션</div>
+                                </div>
+                            </div>
+                            <p class="material-description">
+                                7개 세계 지역에서 광산·공장·판매거점을 건설하고 운송 경로를 설계하여 수익을 극대화하는 교육용 브라우저 게임입니다.
+                            </p>
+                            <ul style="font-size:0.85rem; color: var(--text-secondary); padding-left: 18px; line-height: 1.8; margin: 0;">
+                                <li>7개 세계 지역 · 광산·공장·판매거점 3종 시설</li>
+                                <li>지역별 수요 및 시장가격 차별화</li>
+                                <li>운송 경로 설계 및 비용 계산</li>
+                                <li>5 라운드 기반 손익 시뮬레이션</li>
+                            </ul>
+                            <div class="material-footer">
+                                <span class="material-info">IE105000_1_globalSCM · 2026</span>
+                                <a href="https://ie105000logistics01-lhbdozzj5ifb59yrewgizq.streamlit.app/" class="material-launch" target="_blank">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
+                                        <polyline points="15 3 21 3 21 9" />
+                                        <line x1="10" y1="14" x2="21" y2="3" />
+                                    </svg>
+                                    게임 시작
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- IE105000 #2 -->
+                        <div class="material-card">
+                            <div class="material-card-header">
+                                <div class="material-icon">🚢</div>
+                                <div class="material-meta">
+                                    <span class="material-tag">실습 #2</span>
+                                    <div class="material-title">실습 #2</div>
+                                </div>
+                            </div>
+                            <p class="material-description">
+                                준비 중인 실습 자료입니다.
+                            </p>
+                            <div class="material-footer">
+                                <span class="material-info">IE105000_2 · 2026</span>
+                                <span class="coming-soon-badge">준비중</span>
+                            </div>
+                        </div>
+
+                        <!-- IE105000 #3 -->
+                        <div class="material-card">
+                            <div class="material-card-header">
+                                <div class="material-icon">📊</div>
+                                <div class="material-meta">
+                                    <span class="material-tag">실습 #3</span>
+                                    <div class="material-title">실습 #3</div>
+                                </div>
+                            </div>
+                            <p class="material-description">
+                                준비 중인 실습 자료입니다.
+                            </p>
+                            <div class="material-footer">
+                                <span class="material-info">IE105000_3 · 2026</span>
+                                <span class="coming-soon-badge">준비중</span>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-
-            </div>
         </div>
     </div>
 

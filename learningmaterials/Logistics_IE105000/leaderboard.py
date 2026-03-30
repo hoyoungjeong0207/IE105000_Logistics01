@@ -12,30 +12,32 @@ ADMIN_PASSWORD = "1234IE105000"
 DB_PATH = "leaderboard.db"
 here = Path(__file__).parent
 
-# ── Build a single-file inlined component for fast loading ────────────────────
-# declare_component(path=) serves static files separately (4+ requests).
-# Instead we pre-inline CSS/JS into one HTML and serve that from _comp/.
-def _build_inline_component(src: Path) -> Path:
-    comp_dir = src / "_comp"
-    comp_dir.mkdir(exist_ok=True)
-    html = (src / "index.html").read_text(encoding="utf-8")
-    html = html.replace(
-        '<link rel="stylesheet" href="style.css" />',
-        f'<style>{(src / "style.css").read_text(encoding="utf-8")}\nbody{{height:680px!important;}}</style>',
-    )
-    html = html.replace(
-        '<script src="config.js"></script>',
-        f'<script>{(src / "config.js").read_text(encoding="utf-8")}</script>',
-    )
-    html = html.replace(
-        '<script src="game.js"></script>',
-        f'<script>{(src / "game.js").read_text(encoding="utf-8")}</script>',
-    )
-    (comp_dir / "index.html").write_text(html, encoding="utf-8")
-    return comp_dir
+# ── Single-file inlined component for fast loading ────────────────────────────
+# _comp/index.html is pre-built and committed to git (CSS/JS all inlined).
+# At runtime we try to refresh it; if that fails the committed file is used.
+def _try_refresh_component(src: Path) -> None:
+    try:
+        comp_dir = src / "_comp"
+        comp_dir.mkdir(exist_ok=True)
+        html = (src / "index.html").read_text(encoding="utf-8")
+        html = html.replace(
+            '<link rel="stylesheet" href="style.css" />',
+            f'<style>{(src / "style.css").read_text(encoding="utf-8")}\nbody{{height:680px!important;}}</style>',
+        )
+        html = html.replace(
+            '<script src="config.js"></script>',
+            f'<script>{(src / "config.js").read_text(encoding="utf-8")}</script>',
+        )
+        html = html.replace(
+            '<script src="game.js"></script>',
+            f'<script>{(src / "game.js").read_text(encoding="utf-8")}</script>',
+        )
+        (comp_dir / "index.html").write_text(html, encoding="utf-8")
+    except Exception:
+        pass  # fall back to committed _comp/index.html
 
-_comp_dir = _build_inline_component(here)
-_game_component = components.declare_component("logistics_game", path=str(_comp_dir))
+_try_refresh_component(here)
+_game_component = components.declare_component("logistics_game", path=str(here / "_comp"))
 
 # ── DB helpers ─────────────────────────────────────────────────────────────────
 

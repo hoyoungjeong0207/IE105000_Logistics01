@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Global Logistics Game</title>
+  <style>/* ── Reset ────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: #0f1923;
+  color: #e8edf2;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Header ───────────────────────────────────────────────────────────────── */
+#header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 20px;
+  background: #1a2635;
+  border-bottom: 2px solid #2a3f55;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.header-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #4fc3f7;
+  white-space: nowrap;
+}
+
+.header-stats { display: flex; gap: 10px; flex: 1; }
+
+.stat-box {
+  background: #0f1923;
+  border: 1px solid #2a3f55;
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+.stat-box strong { color: #4fc3f7; }
+
+/* ── Map ──────────────────────────────────────────────────────────────────── */
+#map-container {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  background: #1a2e44;
+}
+
+#map-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0.85;
+  display: block;
+}
+
+#route-svg {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+}
+
+#map-pins {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+}
+
+/* ── Stage announcement ───────────────────────────────────────────────────── */
+#announcement {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  pointer-events: none;
+}
+
+#announcement-text {
+  background: rgba(15, 25, 35, 0.88);
+  border: 1px solid #4fc3f7;
+  border-radius: 24px;
+  padding: 8px 22px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #e8edf2;
+  white-space: nowrap;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+/* ── Region pins ──────────────────────────────────────────────────────────── */
+.region-pin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  pointer-events: all;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  transition: transform 0.15s;
+}
+
+.region-pin:hover { transform: translate(-50%, -50%) scale(1.2); }
+
+.pin-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(79, 195, 247, 0.2);
+  border: 2px solid #4fc3f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #4fc3f7;
+  transition: all 0.2s;
+}
+
+.region-pin.has-facility .pin-circle {
+  background: rgba(129, 199, 132, 0.3);
+  border-color: #81c784;
+  color: #81c784;
+}
+
+/* Pulse when a build mode is active */
+body.build-mode .region-pin:not(.has-facility) .pin-circle {
+  border-color: #ffb74d;
+  color: #ffb74d;
+  animation: pulse 1.2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,183,77,0.4); }
+  50%       { box-shadow: 0 0 0 8px rgba(255,183,77,0); }
+}
+
+.pin-label {
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: #cdd8e3;
+  white-space: nowrap;
+  text-shadow: 0 1px 3px #000;
+}
+
+.pin-emoji { font-size: 0.9rem; line-height: 1; }
+
+/* Route lines — animated dashes */
+@keyframes dash-flow {
+  to { stroke-dashoffset: -18; }
+}
+
+.route-mine-factory {
+  stroke: #ef5350;
+  stroke-width: 2.5;
+  stroke-dasharray: 10 5;
+  stroke-dashoffset: 0;
+  opacity: 0.85;
+  animation: dash-flow 0.9s linear infinite;
+}
+
+.route-factory-hub {
+  stroke: #42a5f5;
+  stroke-width: 2.5;
+  stroke-dasharray: 10 5;
+  stroke-dashoffset: 0;
+  opacity: 0.85;
+  animation: dash-flow 0.9s linear infinite;
+}
+
+/* ── Bottom toolbar ───────────────────────────────────────────────────────── */
+#toolbar {
+  display: flex;
+  flex-shrink: 0;
+  background: #131f2e;
+  border-top: 2px solid #2a3f55;
+  height: 72px;
+}
+
+.tool-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: none;
+  border: none;
+  border-right: 1px solid #2a3f55;
+  color: #e8edf2;
+  cursor: pointer;
+  transition: background 0.2s;
+  padding: 8px 4px;
+}
+
+.tool-btn:last-child { border-right: none; }
+.tool-btn:hover { background: #1a2e44; }
+
+.tool-btn.active {
+  background: #1a3448;
+  border-top: 3px solid #ffb74d;
+}
+
+.simulate-btn { color: #81c784; }
+.simulate-btn:hover { background: #1a2e1e; }
+
+.tool-btn.locked {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.tool-emoji { font-size: 1.4rem; line-height: 1; }
+.tool-label { font-size: 0.72rem; font-weight: 600; }
+.tool-cost  { font-size: 0.65rem; color: #aaa; }
+
+/* ── Region popup ─────────────────────────────────────────────────────────── */
+#region-popup {
+  position: absolute;
+  z-index: 50;
+  background: #1a2635;
+  border: 1.5px solid #4fc3f7;
+  border-radius: 12px;
+  padding: 14px 16px;
+  min-width: 220px;
+  max-width: 260px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  pointer-events: all;
+}
+#region-popup.hidden { display: none; }
+
+#popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #4fc3f7;
+}
+
+#popup-close {
+  background: none; border: none;
+  color: #888; cursor: pointer; font-size: 1rem; padding: 0;
+}
+#popup-close:hover { color: #e8edf2; }
+
+#popup-region-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #2a3f55;
+}
+
+.popup-stat {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #b0bec5;
+}
+.popup-stat strong { color: #e8edf2; }
+
+#popup-facility-info {
+  font-size: 0.8rem;
+  color: #b0bec5;
+  margin-bottom: 10px;
+}
+
+.popup-fac-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 0;
+}
+.popup-fac-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #ffb74d;
+  margin-bottom: 5px;
+}
+
+#popup-actions { display: flex; gap: 8px; }
+
+.popup-btn-build {
+  flex: 1;
+  padding: 8px;
+  background: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 7px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.popup-btn-build:hover { background: #388e3c; }
+.popup-btn-build:disabled { background: #555; cursor: not-allowed; }
+
+.popup-btn-delete {
+  flex: 1;
+  padding: 8px;
+  background: #b71c1c;
+  color: white;
+  border: none;
+  border-radius: 7px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.popup-btn-delete:hover { background: #c62828; }
+
+/* ── Result overlay ───────────────────────────────────────────────────────── */
+#result-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+#result-overlay.hidden { display: none; }
+
+#result-box {
+  background: #1a2635;
+  border: 2px solid #4fc3f7;
+  border-radius: 16px;
+  padding: 28px 36px;
+  min-width: 320px;
+  max-width: 480px;
+  width: 90%;
+}
+
+#result-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #4fc3f7;
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.88rem;
+  padding: 6px 0;
+  border-bottom: 1px solid #2a3f55;
+}
+.result-row.total {
+  font-weight: 700;
+  font-size: 1rem;
+  border-bottom: none;
+  padding-top: 12px;
+  margin-top: 4px;
+}
+
+.green { color: #81c784; }
+.red   { color: #e57373; }
+
+#submit-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+#submit-fields {
+  display: flex;
+  gap: 8px;
+}
+
+#submit-fields input {
+  flex: 1;
+  padding: 9px 12px;
+  background: #0f1923;
+  border: 1px solid #2a3f55;
+  border-radius: 8px;
+  color: #e8edf2;
+  font-size: 0.88rem;
+  outline: none;
+}
+#submit-fields input:focus { border-color: #4fc3f7; }
+#submit-fields input::placeholder { color: #556; }
+
+#player-name {
+  flex: 1;
+  padding: 9px 12px;
+  background: #0f1923;
+  border: 1px solid #2a3f55;
+  border-radius: 8px;
+  color: #e8edf2;
+  font-size: 0.88rem;
+  outline: none;
+}
+#player-name:focus { border-color: #4fc3f7; }
+#player-name::placeholder { color: #556; }
+
+#btn-submit-score {
+  padding: 9px 14px;
+  background: #1565c0;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+#btn-submit-score:hover { background: #1976d2; }
+
+#rank-result {
+  margin-top: 14px;
+  padding: 14px 16px;
+  background: #0d2137;
+  border: 1px solid #4fc3f7;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  line-height: 1.8;
+  text-align: center;
+  color: #e8edf2;
+}
+
+#btn-restart {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  background: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+#btn-restart:hover { background: #388e3c; }
+
+/* ── Leaderboard header button ────────────────────────────────────────────── */
+.lb-header-btn {
+  background: #1a3448;
+  border: 1px solid #2a3f55;
+  border-radius: 8px;
+  color: #e8edf2;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 5px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.lb-header-btn:hover { background: #2a4a60; border-color: #4fc3f7; }
+
+/* ── Leaderboard overlay ──────────────────────────────────────────────────── */
+#lb-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+#lb-overlay.hidden { display: none; }
+
+#lb-box {
+  background: #1a2635;
+  border: 2px solid #4fc3f7;
+  border-radius: 16px;
+  padding: 16px 20px 0;
+  width: 900px;
+  max-width: 95vw;
+  height: 85vh;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#lb-iframe {
+  flex: 1;
+  width: 100%;
+  border: none;
+  border-radius: 0 0 14px 14px;
+}
+
+#lb-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#lb-title { font-size: 1.1rem; font-weight: 700; color: #4fc3f7; }
+#lb-close { background: none; border: none; color: #888; font-size: 1rem; cursor: pointer; }
+#lb-close:hover { color: #e8edf2; }
+
+#lb-tabs { display: flex; gap: 6px; }
+.lb-tab {
+  flex: 1;
+  padding: 6px;
+  background: #0f1923;
+  border: 1px solid #2a3f55;
+  border-radius: 7px;
+  color: #aaa;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.lb-tab.active { background: #1a3448; border-color: #4fc3f7; color: #e8edf2; }
+
+.lb-panel { overflow-y: auto; flex: 1; }
+.lb-panel.hidden { display: none; }
+
+/* Score rows */
+.lb-row {
+  display: grid;
+  grid-template-columns: 32px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 6px;
+  border-bottom: 1px solid #1e3045;
+  font-size: 0.83rem;
+}
+.lb-row:last-child { border-bottom: none; }
+.lb-rank { font-weight: 700; color: #4fc3f7; text-align: center; }
+.lb-name { font-weight: 600; color: #e8edf2; }
+.lb-chain { font-size: 0.72rem; color: #7a9bb5; }
+.lb-profit { font-weight: 700; white-space: nowrap; }
+.lb-profit.pos { color: #81c784; }
+.lb-profit.neg { color: #e57373; }
+
+/* Admin panel */
+#lb-admin-login { display: flex; gap: 8px; }
+#lb-admin-pwd {
+  flex: 1;
+  padding: 8px 12px;
+  background: #0f1923;
+  border: 1px solid #2a3f55;
+  border-radius: 7px;
+  color: #e8edf2;
+  font-size: 0.85rem;
+  outline: none;
+}
+#lb-admin-pwd:focus { border-color: #4fc3f7; }
+#lb-admin-submit {
+  padding: 8px 16px;
+  background: #1565c0;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.lb-admin-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 4px;
+  border-bottom: 1px solid #1e3045;
+  font-size: 0.82rem;
+  gap: 8px;
+}
+.lb-admin-row span { flex: 1; color: #cdd8e3; }
+.lb-del-btn {
+  padding: 4px 10px;
+  background: #b71c1c;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+.lb-del-btn:hover { background: #c62828; }
+
+/* ── Mobile ───────────────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  #header {
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 6px 12px;
+  }
+  .header-title { font-size: 0.95rem; }
+  .header-stats {
+    flex-wrap: wrap;
+    gap: 5px;
+    order: 3;
+    width: 100%;
+  }
+  .stat-box { font-size: 0.75rem; padding: 3px 8px; }
+  .lb-header-btn { font-size: 0.75rem; padding: 4px 10px; }
+
+  #announcement-text {
+    font-size: 0.75rem;
+    white-space: normal;
+    text-align: center;
+    padding: 6px 14px;
+    max-width: 90vw;
+  }
+
+  /* Popup as bottom sheet on mobile */
+  #region-popup {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 74px !important;
+    top: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: unset !important;
+    border-radius: 16px 16px 0 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: none !important;
+    z-index: 60 !important;
+    padding: 18px 20px 16px !important;
+  }
+
+  .popup-btn-build,
+  .popup-btn-delete {
+    padding: 12px;
+    font-size: 0.9rem;
+  }
+
+  .tool-emoji { font-size: 1.6rem; }
+  .tool-label { font-size: 0.7rem; }
+  #toolbar { height: 74px; }
+
+  .pin-circle { width: 34px; height: 34px; font-size: 0.7rem; }
+
+  #result-box { padding: 20px 18px; }
+  #submit-fields { flex-direction: column; }
+}
+
+/* ── Toast ────────────────────────────────────────────────────────────────── */
+#toast {
+  position: fixed;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: #1a2e44;
+  border: 1px solid #4fc3f7;
+  color: #e8edf2;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 50;
+  white-space: nowrap;
+}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+body{height:680px!important;}</style>
+  <script src="https://unpkg.com/streamlit-component-lib/dist/index.js"></script>
+</head>
+<body>
+
+  <!-- ── Header ─────────────────────────────────────────────────────────── -->
+  <header id="header">
+    <div class="header-title">🌐 Global Logistics</div>
+    <div class="header-stats">
+      <span class="stat-box">💰 Budget: <strong id="hud-budget">$500,000</strong></span>
+      <span class="stat-box">📦 Output: <strong id="hud-output">— units</strong></span>
+      <span class="stat-box">📈 Profit: <strong id="hud-profit">$0</strong></span>
+    </div>
+    <button id="btn-leaderboard" class="lb-header-btn">🏆 Leaderboard</button>
+  </header>
+
+  <!-- ── Map (full screen) ──────────────────────────────────────────────── -->
+  <div id="map-container">
+    <img id="map-img"
+      src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/World_map_-_low_resolution.svg/1280px-World_map_-_low_resolution.svg.png"
+      alt="World Map" />
+    <div id="map-pins"></div>
+    <svg id="route-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+
+    <!-- Stage announcement banner -->
+    <div id="announcement">
+      <div id="announcement-text"></div>
+    </div>
+  </div>
+
+  <!-- ── Region popup ──────────────────────────────────────────────────── -->
+  <div id="region-popup" class="hidden">
+    <div id="popup-header">
+      <span id="popup-region-name"></span>
+      <button id="popup-close" onclick="closePopup()">✕</button>
+    </div>
+    <div id="popup-region-stats">
+      <div class="popup-stat"><span>📦 Demand</span><strong id="popup-demand"></strong></div>
+      <div class="popup-stat"><span>💲 Market Price</span><strong id="popup-price"></strong></div>
+    </div>
+    <div id="popup-facility-info"></div>
+    <div id="popup-actions"></div>
+  </div>
+
+  <!-- ── Result overlay ────────────────────────────────────────────────── -->
+  <div id="result-overlay" class="hidden">
+    <div id="result-box">
+      <div id="result-title">Simulation Results</div>
+      <div id="result-rows"></div>
+      <div id="submit-section">
+        <div id="submit-fields">
+          <input id="student-id"  type="text" placeholder="학번 (Student ID)" maxlength="20" />
+          <input id="player-name" type="text" placeholder="이름 (Name)"        maxlength="40" />
+        </div>
+        <button id="btn-submit-score">🏆 Submit Score to Leaderboard</button>
+      </div>
+      <div id="rank-result" style="display:none;margin-top:14px;text-align:center;line-height:1.7">
+        <div id="rank-text"></div>
+      </div>
+      <button id="btn-restart">🔄 Play Again</button>
+    </div>
+  </div>
+
+
+  <!-- ── Bottom toolbar (4 buttons) ───────────────────────────────────── -->
+  <div id="toolbar">
+    <button class="tool-btn" id="btn-mine"    data-mode="mine">
+      <span class="tool-emoji">⛏️</span>
+      <span class="tool-label">Mine</span>
+      <span class="tool-cost" id="cost-mine"></span>
+    </button>
+    <button class="tool-btn" id="btn-factory" data-mode="factory">
+      <span class="tool-emoji">🏭</span>
+      <span class="tool-label">Factory</span>
+      <span class="tool-cost" id="cost-factory"></span>
+    </button>
+    <button class="tool-btn" id="btn-salesHub" data-mode="salesHub">
+      <span class="tool-emoji">🏪</span>
+      <span class="tool-label">Sales Hub</span>
+      <span class="tool-cost" id="cost-salesHub"></span>
+    </button>
+    <button class="tool-btn simulate-btn" id="btn-simulate">
+      <span class="tool-emoji">▶</span>
+      <span class="tool-label">Simulate</span>
+    </button>
+  </div>
+
+  <!-- ── Toast ─────────────────────────────────────────────────────────── -->
+  <div id="toast"></div>
+
+  <script>/**
+ * config.js — All game data lives here.
+ * Edit this file to change regions, costs, demand, or game rules.
+ * No other file needs to change for data adjustments.
+ */
+
+const CONFIG = {
+
+  // ── Leaderboard backend (Streamlit app) ───────────────────────────────────
+  // Paste the Streamlit Community Cloud URL after deploying leaderboard.py
+  leaderboard: {
+    streamlitUrl: "https://ie105000logistics01-lhbdozzj5ifb59yrewgizq.streamlit.app",
+  },
+
+  // ── Starting budget ────────────────────────────────────────────────────────
+  budget: {
+    initial: 500_000,
+  },
+
+  // ── Game mode ──────────────────────────────────────────────────────────────
+  gameMode: {
+    periods: 1,
+    showCostBreakdown: true,
+  },
+
+  // ── World regions ──────────────────────────────────────────────────────────
+  // mapPos: percentage (x%, y%) on the world map image
+  // facilityCosts: per-region values for buildCost, opCostPerUnit, outputPerPeriod
+  //   opCostPerUnit = variable operating cost charged per unit produced/sold
+  regions: {
+    NorthAmerica: {
+      label: "North America",
+      demand: 120,
+      marketPrice: 200,
+      mapPos: { x: 24, y: 32 },
+      facilityCosts: {
+        mine:     { buildCost: 100_000, opCostPerUnit: 115, outputPerPeriod: 80  },
+        factory:  { buildCost: 200_000, opCostPerUnit: 135, outputPerPeriod: 220 },
+        salesHub: { buildCost: 60_000,  opCostPerUnit: 70 },
+      },
+    },
+    SouthAmerica: {
+      label: "South America",
+      demand: 60,
+      marketPrice: 160,
+      mapPos: { x: 31, y: 65 },
+      facilityCosts: {
+        mine:     { buildCost: 70_000,  opCostPerUnit: 70,  outputPerPeriod: 110 },
+        factory:  { buildCost: 130_000, opCostPerUnit: 90,  outputPerPeriod: 160 },
+        salesHub: { buildCost: 35_000,  opCostPerUnit: 35 },
+      },
+    },
+    Europe: {
+      label: "Europe",
+      demand: 100,
+      marketPrice: 225,
+      mapPos: { x: 50, y: 24 },
+      facilityCosts: {
+        mine:     { buildCost: 120_000, opCostPerUnit: 140, outputPerPeriod: 60  },
+        factory:  { buildCost: 180_000, opCostPerUnit: 145, outputPerPeriod: 200 },
+        salesHub: { buildCost: 70_000,  opCostPerUnit: 85 },
+      },
+    },
+    Africa: {
+      label: "Africa",
+      demand: 50,
+      marketPrice: 140,
+      mapPos: { x: 52, y: 57 },
+      facilityCosts: {
+        mine:     { buildCost: 55_000,  opCostPerUnit: 40,  outputPerPeriod: 130 },
+        factory:  { buildCost: 100_000, opCostPerUnit: 70,  outputPerPeriod: 140 },
+        salesHub: { buildCost: 25_000,  opCostPerUnit: 25 },
+      },
+    },
+    MiddleEast: {
+      label: "Middle East",
+      demand: 40,
+      marketPrice: 175,
+      mapPos: { x: 59, y: 38 },
+      facilityCosts: {
+        mine:     { buildCost: 65_000,  opCostPerUnit: 55,  outputPerPeriod: 100 },
+        factory:  { buildCost: 140_000, opCostPerUnit: 95,  outputPerPeriod: 170 },
+        salesHub: { buildCost: 40_000,  opCostPerUnit: 50 },
+      },
+    },
+    Asia: {
+      label: "Asia",
+      demand: 150,
+      marketPrice: 150,
+      mapPos: { x: 74, y: 28 },
+      facilityCosts: {
+        mine:     { buildCost: 75_000,  opCostPerUnit: 80,  outputPerPeriod: 120 },
+        factory:  { buildCost: 120_000, opCostPerUnit: 55,  outputPerPeriod: 210 },
+        salesHub: { buildCost: 50_000,  opCostPerUnit: 65 },
+      },
+    },
+    Oceania: {
+      label: "Oceania",
+      demand: 30,
+      marketPrice: 190,
+      mapPos: { x: 80, y: 68 },
+      facilityCosts: {
+        mine:     { buildCost: 80_000,  opCostPerUnit: 90,  outputPerPeriod: 90  },
+        factory:  { buildCost: 160_000, opCostPerUnit: 105, outputPerPeriod: 180 },
+        salesHub: { buildCost: 30_000,  opCostPerUnit: 55 },
+      },
+    },
+  },
+
+  // ── Facilities ─────────────────────────────────────────────────────────────
+  // buildCost / opCostPerUnit / outputPerPeriod vary by region — see facilityCosts above.
+  facilities: {
+    mine: {
+      label: "Mine",
+      emoji: "⛏️",
+      description: "Extracts raw materials. Cost and output vary by region.",
+    },
+    factory: {
+      label: "Factory",
+      emoji: "🏭",
+      description: "Produces finished goods. Cost and output vary by region.",
+    },
+    salesHub: {
+      label: "Sales Hub",
+      emoji: "🏪",
+      outputPerPeriod: 0,   // never produces — only sells
+      description: "Sells goods to local customers. Required to earn revenue.",
+    },
+  },
+
+  // ── Transport cost ($/unit) between regions ────────────────────────────────
+  // transportCost[origin][destination]
+  transportCost: {
+    NorthAmerica: { SouthAmerica: 4,  Europe: 6,  Africa: 9,  MiddleEast: 11, Asia: 13, Oceania: 14 },
+    SouthAmerica: { NorthAmerica: 4,  Europe: 8,  Africa: 7,  MiddleEast: 12, Asia: 15, Oceania: 13 },
+    Europe:       { NorthAmerica: 6,  SouthAmerica: 8,  Africa: 5,  MiddleEast: 6,  Asia: 9,  Oceania: 14 },
+    Africa:       { NorthAmerica: 9,  SouthAmerica: 7,  Europe: 5,  MiddleEast: 5,  Asia: 10, Oceania: 12 },
+    MiddleEast:   { NorthAmerica: 11, SouthAmerica: 12, Europe: 6,  Africa: 5,  Asia: 6,  Oceania: 9  },
+    Asia:         { NorthAmerica: 13, SouthAmerica: 15, Europe: 9,  Africa: 10, MiddleEast: 6,  Oceania: 5  },
+    Oceania:      { NorthAmerica: 14, SouthAmerica: 13, Europe: 14, Africa: 12, MiddleEast: 9,  Asia: 5     },
+  },
+};
+</script>
+  <script>/**
+ * game.js — Core game logic.
+ * All data comes from CONFIG (config.js).
+ */
+
+// ── Streamlit leaderboard helper ──────────────────────────────────────────────
+
+const STREAMLIT = () => CONFIG.leaderboard.streamlitUrl;
+
+// ── Stage announcements ───────────────────────────────────────────────────────
+
+const STAGES = [
+  {
+    id: "needMine",
+    text: "⛏️ Step 1: Build a Mine — select Mine below, then click a region to extract raw materials",
+  },
+  {
+    id: "needFactory",
+    text: "🏭 Step 2: Build a Factory — it will receive raw materials from your Mine",
+  },
+  {
+    id: "needHub",
+    text: "🏪 Step 3: Build a Sales Hub — finished goods will be shipped here to sell",
+  },
+  {
+    id: "ready",
+    text: "✅ Chain complete: ⛏️ Mine →🔴→ 🏭 Factory →🔵→ 🏪 Hub   Click ▶ Simulate!",
+  },
+];
+
+// ── Streamlit component communication ────────────────────────────────────────
+// Set to true once the first 'streamlit:render' event arrives from Streamlit.
+// Stays false when running standalone (Netlify / GitHub Pages).
+let _streamlitActive = false;
+
+// ── Game state ────────────────────────────────────────────────────────────────
+
+const state = {
+  budget:      CONFIG.budget.initial,
+  totalProfit: 0,
+  activeMode:  null,       // "mine" | "factory" | "salesHub" | null
+  facilities:  {},         // { regionId: facilityType }
+  routes:      [],         // [{ from, to }]
+};
+
+// ── Image bounds (accounts for object-fit: contain) ──────────────────────────
+
+function getImageBounds() {
+  const container = document.getElementById('map-container');
+  const img       = document.getElementById('map-img');
+  const cW = container.offsetWidth;
+  const cH = container.offsetHeight;
+  const iW = img.naturalWidth  || 1280;
+  const iH = img.naturalHeight || 640;
+  const imgRatio = iW / iH;
+  const conRatio = cW / cH;
+
+  let w, h, x, y;
+  if (imgRatio > conRatio) {
+    w = cW; h = cW / imgRatio;
+    x = 0;  y = (cH - h) / 2;
+  } else {
+    h = cH; w = cH * imgRatio;
+    y = 0;  x = (cW - w) / 2;
+  }
+  return { x, y, w, h };
+}
+
+// ── Facility config helper (merges global label/emoji with per-region costs) ──
+
+function getFacilityCfg(regionId, facType) {
+  const base     = CONFIG.facilities[facType] ?? {};
+  const override = CONFIG.regions[regionId]?.facilityCosts?.[facType] ?? {};
+  return { ...base, ...override };
+}
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Toolbar cost labels show "varies" since costs differ by region
+  for (const fId of Object.keys(CONFIG.facilities)) {
+    const el = document.getElementById(`cost-${fId}`);
+    if (el) el.textContent = fId === 'salesHub' ? 'varies' : 'varies';
+  }
+
+  // Re-render pins when image loads (to get correct naturalWidth/Height)
+  const img = document.getElementById('map-img');
+  if (img.complete) { renderPins(); } else { img.addEventListener('load', renderPins); }
+
+  // Re-render on resize
+  window.addEventListener('resize', () => { renderPins(); });
+
+  updateHUD();
+  setAnnouncement(STAGES[0].text);
+
+  // Toolbar buttons
+  for (const [fId] of Object.entries(CONFIG.facilities)) {
+    document.getElementById(`btn-${fId}`)
+      ?.addEventListener('click', () => toggleMode(fId));
+  }
+  document.getElementById('btn-simulate').addEventListener('click', onSimulate);
+  document.getElementById('btn-restart').addEventListener('click', onRestart);
+
+  // ── Leaderboard wiring ────────────────────────────────────────────────────
+  document.getElementById('btn-leaderboard').addEventListener('click', openLeaderboard);
+
+  // ── Streamlit component setup ─────────────────────────────────────────────
+  if (typeof Streamlit !== 'undefined') {
+    Streamlit.setComponentReady();
+    Streamlit.setFrameHeight(680);
+    window.addEventListener('streamlit:render', (event) => {
+      _streamlitActive = true;
+      const args = (event.detail && event.detail.args) || {};
+      if (args.rank != null) {
+        document.getElementById('submit-section').style.display = 'none';
+        document.getElementById('rank-result').style.display = 'block';
+        document.getElementById('rank-text').innerHTML =
+          `✅ <strong>${args.playerName}</strong> 님 등록 완료!<br>` +
+          `🏆 현재 순위: <strong>${args.rank}등 / ${args.total}명</strong>`;
+      } else {
+        document.getElementById('rank-result').style.display = 'none';
+        document.getElementById('submit-section').style.display = '';
+      }
+    });
+  }
+});
+
+// ── Mode (active build tool) ──────────────────────────────────────────────────
+
+function toggleMode(fId) {
+  // Enforce sequential build order
+  const hasMine    = Object.values(state.facilities).some(f => f === 'mine');
+  const hasFactory = Object.values(state.facilities).some(f => f === 'factory');
+  if (fId === 'factory' && !hasMine) {
+    toast('⛏️ Build a Mine first!'); return;
+  }
+  if (fId === 'salesHub' && !hasFactory) {
+    toast('🏭 Build a Factory first!'); return;
+  }
+
+  if (state.activeMode === fId) {
+    state.activeMode = null;
+    document.body.classList.remove('build-mode');
+  } else {
+    state.activeMode = fId;
+    document.body.classList.add('build-mode');
+    const fCfg = CONFIG.facilities[fId];
+    toast(`${fCfg.emoji} ${fCfg.label} selected — click a region to place it`);
+  }
+  updateToolbarActive();
+}
+
+function clearMode() {
+  state.activeMode = null;
+  document.body.classList.remove('build-mode');
+  updateToolbarActive();
+}
+
+function updateToolbarActive() {
+  const hasMine    = Object.values(state.facilities).some(f => f === 'mine');
+  const hasFactory = Object.values(state.facilities).some(f => f === 'factory');
+
+  document.querySelectorAll('.tool-btn').forEach(btn => btn.classList.remove('active'));
+  if (state.activeMode) {
+    document.getElementById(`btn-${state.activeMode}`)?.classList.add('active');
+  }
+
+  // Grey out buttons whose prerequisites aren't met
+  const btnFactory  = document.getElementById('btn-factory');
+  const btnSalesHub = document.getElementById('btn-salesHub');
+  if (btnFactory)  btnFactory.classList.toggle('locked', !hasMine);
+  if (btnSalesHub) btnSalesHub.classList.toggle('locked', !hasFactory);
+}
+
+// ── Pins ──────────────────────────────────────────────────────────────────────
+
+function renderPins() {
+  const container = document.getElementById('map-pins');
+  container.innerHTML = '';
+  const b = getImageBounds();
+
+  for (const [id, region] of Object.entries(CONFIG.regions)) {
+    const facility = state.facilities[id];
+    const fCfg     = facility ? CONFIG.facilities[facility] : null;
+
+    const pin = document.createElement('div');
+    pin.className = 'region-pin' + (facility ? ' has-facility' : '');
+    pin.id = `pin-${id}`;
+    pin.style.left = (b.x + (region.mapPos.x / 100) * b.w) + 'px';
+    pin.style.top  = (b.y + (region.mapPos.y / 100) * b.h) + 'px';
+    pin.dataset.region = id;
+
+    pin.innerHTML = `
+      <div class="pin-circle">${region.label.split(' ').map(w => w[0]).join('')}</div>
+      ${fCfg ? `<div class="pin-emoji">${fCfg.emoji}</div>` : ''}
+      <div class="pin-label">${region.label}</div>
+    `;
+
+    pin.addEventListener('click', () => onRegionClick(id));
+    container.appendChild(pin);
+  }
+
+  renderRoutes();
+}
+
+function renderRoutes() {
+  const svg = document.getElementById('route-svg');
+  svg.innerHTML = '';
+  const b = getImageBounds();
+
+  for (const route of state.routes) {
+    const from = CONFIG.regions[route.from];
+    const to   = CONFIG.regions[route.to];
+    if (!from || !to) continue;
+
+    const cls = route.type === 'mine-factory' ? 'route-mine-factory' : 'route-factory-hub';
+
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', b.x + (from.mapPos.x / 100) * b.w);
+    line.setAttribute('y1', b.y + (from.mapPos.y / 100) * b.h);
+    line.setAttribute('x2', b.x + (to.mapPos.x   / 100) * b.w);
+    line.setAttribute('y2', b.y + (to.mapPos.y   / 100) * b.h);
+    line.setAttribute('class', cls);
+    svg.appendChild(line);
+  }
+}
+
+// ── Region click — show popup ─────────────────────────────────────────────────
+
+function onRegionClick(regionId) {
+  showPopup(regionId);
+}
+
+function showPopup(regionId) {
+  const region   = CONFIG.regions[regionId];
+  const existing = state.facilities[regionId];
+  const fCfg     = existing ? getFacilityCfg(regionId, existing) : null;
+  const mode     = state.activeMode;
+  const modeCfg  = mode ? getFacilityCfg(regionId, mode) : null;
+
+  // Position popup near the pin
+  const b    = getImageBounds();
+  const pinX = b.x + (region.mapPos.x / 100) * b.w;
+  const pinY = b.y + (region.mapPos.y / 100) * b.h;
+  const popup = document.getElementById('region-popup');
+  const mapEl = document.getElementById('map-container');
+
+  // On mobile use CSS bottom-sheet positioning; on desktop float near pin
+  if (window.innerWidth > 600) {
+    let left = pinX + 18;
+    let top  = pinY - 20;
+    if (left + 270 > mapEl.offsetWidth)  left = pinX - 278;
+    if (top  + 240 > mapEl.offsetHeight) top  = mapEl.offsetHeight - 245;
+    if (top < 10) top = 10;
+    popup.style.left = left + 'px';
+    popup.style.top  = top  + 'px';
+  } else {
+    popup.style.left = '';
+    popup.style.top  = '';
+  }
+
+  // Header
+  document.getElementById('popup-region-name').textContent =
+    `${fCfg ? fCfg.emoji + ' ' : ''}${region.label}`;
+
+  // Region stats
+  document.getElementById('popup-demand').textContent = `${region.demand} units`;
+  document.getElementById('popup-price').textContent  = `$${region.marketPrice}/unit`;
+
+  // Facility info section
+  const infoEl = document.getElementById('popup-facility-info');
+  if (existing) {
+    // Show current facility stats
+    infoEl.innerHTML = `
+      <div class="popup-fac-title">${fCfg.emoji} ${fCfg.label} (built)</div>
+      <div class="popup-fac-row"><span>Build cost</span><span>$${fCfg.buildCost.toLocaleString()}</span></div>
+      <div class="popup-fac-row"><span>Op. cost</span><span>$${fCfg.opCostPerUnit.toLocaleString()}/unit</span></div>
+      ${fCfg.outputPerPeriod > 0 ? `<div class="popup-fac-row"><span>Max output</span><span>${fCfg.outputPerPeriod} units</span></div>` : ''}
+    `;
+  } else if (modeCfg) {
+    // Show the selected facility to build
+    infoEl.innerHTML = `
+      <div class="popup-fac-title">${modeCfg.emoji} Build ${modeCfg.label} here?</div>
+      <div class="popup-fac-row"><span>Build cost</span><span style="color:#e57373">-$${modeCfg.buildCost.toLocaleString()}</span></div>
+      <div class="popup-fac-row"><span>Op. cost</span><span>$${modeCfg.opCostPerUnit.toLocaleString()}/unit</span></div>
+      ${modeCfg.outputPerPeriod > 0 ? `<div class="popup-fac-row"><span>Max output</span><span>${modeCfg.outputPerPeriod} units</span></div>` : ''}
+      <div class="popup-fac-row"><span>Budget after</span><span style="color:${state.budget - modeCfg.buildCost >= 0 ? '#81c784' : '#e57373'}">$${(state.budget - modeCfg.buildCost).toLocaleString()}</span></div>
+    `;
+  } else {
+    infoEl.innerHTML = `<div style="color:#888;font-size:0.78rem">Select a facility button below to build here.</div>`;
+  }
+
+  // Action buttons
+  const actEl = document.getElementById('popup-actions');
+  actEl.innerHTML = '';
+
+  if (existing) {
+    const delBtn = document.createElement('button');
+    delBtn.className = 'popup-btn-delete';
+    delBtn.textContent = '🗑️ Remove';
+    delBtn.onclick = () => { removeFacility(regionId); closePopup(); };
+    actEl.appendChild(delBtn);
+  } else if (modeCfg) {
+    const buildBtn = document.createElement('button');
+    buildBtn.className = 'popup-btn-build';
+    buildBtn.textContent = `✓ Build ${modeCfg.label}`;
+    buildBtn.disabled = state.budget < modeCfg.buildCost;
+    buildBtn.onclick = () => { buildFacility(regionId); closePopup(); };
+    actEl.appendChild(buildBtn);
+  }
+
+  popup.classList.remove('hidden');
+}
+
+function closePopup() {
+  document.getElementById('region-popup').classList.add('hidden');
+}
+
+// ── Build / Remove ────────────────────────────────────────────────────────────
+
+function buildFacility(regionId) {
+  const fCfg = getFacilityCfg(regionId, state.activeMode);
+  if (!fCfg || state.budget < fCfg.buildCost) return;
+
+  state.budget -= fCfg.buildCost;
+  state.facilities[regionId] = state.activeMode;
+  autoConnectRoutes(regionId, state.activeMode);
+  toast(`${fCfg.emoji} ${fCfg.label} built in ${CONFIG.regions[regionId].label}!`);
+  clearMode();
+  updateHUD();
+  renderPins();
+  updateStageAnnouncement();
+  updateToolbarActive();
+}
+
+function removeFacility(regionId) {
+  const existing = state.facilities[regionId];
+  if (!existing) return;
+  const fCfg = CONFIG.facilities[existing];
+  delete state.facilities[regionId];
+  state.routes = state.routes.filter(r => r.from !== regionId && r.to !== regionId);
+  toast(`🗑️ ${fCfg.emoji} removed from ${CONFIG.regions[regionId].label}`);
+  updateHUD();
+  renderPins();
+  updateStageAnnouncement();
+  updateToolbarActive();
+}
+
+// ── Auto-route ────────────────────────────────────────────────────────────────
+// Chain: Mine --[red]--> Factory --[blue]--> Sales Hub
+
+function autoConnectRoutes(newRegionId, facilityType) {
+  if (facilityType === 'mine') {
+    // Connect to all existing factories (red)
+    for (const [rId, fId] of Object.entries(state.facilities)) {
+      if (rId === newRegionId) continue;
+      if (fId === 'factory') addRoute(newRegionId, rId, 'mine-factory');
+    }
+  } else if (facilityType === 'factory') {
+    // Connect from all existing mines (red) + to all existing hubs (blue)
+    for (const [rId, fId] of Object.entries(state.facilities)) {
+      if (rId === newRegionId) continue;
+      if (fId === 'mine')     addRoute(rId, newRegionId, 'mine-factory');
+      if (fId === 'salesHub') addRoute(newRegionId, rId, 'factory-hub');
+    }
+  } else if (facilityType === 'salesHub') {
+    // Connect from all existing factories (blue)
+    for (const [rId, fId] of Object.entries(state.facilities)) {
+      if (rId === newRegionId) continue;
+      if (fId === 'factory') addRoute(rId, newRegionId, 'factory-hub');
+    }
+  }
+}
+
+function addRoute(from, to, type) {
+  const exists = state.routes.some(r => r.from === from && r.to === to);
+  if (!exists) state.routes.push({ from, to, type });
+}
+
+// ── Stage announcement ────────────────────────────────────────────────────────
+
+function updateStageAnnouncement() {
+  const hasMine    = Object.values(state.facilities).some(f => f === 'mine');
+  const hasFactory = Object.values(state.facilities).some(f => f === 'factory');
+  const hasHub     = Object.values(state.facilities).some(f => f === 'salesHub');
+
+  if (!hasMine)         setAnnouncement(STAGES[0].text);
+  else if (!hasFactory) setAnnouncement(STAGES[1].text);
+  else if (!hasHub)     setAnnouncement(STAGES[2].text);
+  else                  setAnnouncement(STAGES[3].text);
+}
+
+function setAnnouncement(text) {
+  document.getElementById('announcement-text').textContent = text;
+}
+
+// ── Simulate ──────────────────────────────────────────────────────────────────
+
+function onSimulate() {
+  const hasMine    = Object.values(state.facilities).some(f => f === 'mine');
+  const hasFactory = Object.values(state.facilities).some(f => f === 'factory');
+  const hasHub     = Object.values(state.facilities).some(f => f === 'salesHub');
+
+  if (!hasMine)    { toast('⛏️ Build a Mine first!');    return; }
+  if (!hasFactory) { toast('🏭 Build a Factory first!'); return; }
+  if (!hasHub)     { toast('🏪 Build a Sales Hub first!'); return; }
+
+  const result = calculateResult();
+  state.totalProfit = result.netProfit;
+  updateHUD();
+  showResultOverlay(result);
+}
+
+function calculateResult() {
+  let revenue       = 0;
+  let opCost        = 0;
+  let transportCost = 0;
+  const rows        = [];
+
+  // Operating costs computed per-unit at the end (accumulated below)
+
+  // Two-stage chain: Mine → Factory → Sales Hub
+  // For each Factory→Hub route, check if the factory has at least one Mine feeding it
+  const sfRoutes = state.routes.filter(r => r.type === 'mine-factory');
+  const fhRoutes = state.routes.filter(r => r.type === 'factory-hub');
+
+  for (const fhRoute of fhRoutes) {
+    const factoryId = fhRoute.from;
+    const hubId     = fhRoute.to;
+    if (state.facilities[factoryId] !== 'factory')  continue;
+    if (state.facilities[hubId]     !== 'salesHub') continue;
+
+    // Find mines feeding this factory
+    const feedingMines = sfRoutes.filter(r => r.to === factoryId);
+    if (feedingMines.length === 0) continue;  // factory has no raw material
+
+    // Raw material available = sum of per-region mine outputs
+    const rawSupply = feedingMines.reduce((sum, r) => {
+      return sum + (getFacilityCfg(r.from, 'mine').outputPerPeriod ?? 0);
+    }, 0);
+
+    const factoryCfg = getFacilityCfg(factoryId, 'factory');
+    const hubRegion  = CONFIG.regions[hubId];
+    const units      = Math.min(rawSupply, factoryCfg.outputPerPeriod, hubRegion.demand);
+
+    // Transport: average mine→factory cost + factory→hub cost
+    const mineTransportCost = feedingMines.reduce((sum, r) => {
+      return sum + (CONFIG.transportCost[r.from]?.[factoryId] ?? 0);
+    }, 0) / feedingMines.length;
+    const hubTransportCost = CONFIG.transportCost[factoryId]?.[hubId] ?? 0;
+
+    const rev   = units * hubRegion.marketPrice;
+    const trans = units * (mineTransportCost + hubTransportCost);
+
+    // Per-unit operating costs: avg mine op + factory op + hub op
+    const mineOpPerUnit = feedingMines.reduce((sum, r) => {
+      return sum + (getFacilityCfg(r.from, 'mine').opCostPerUnit ?? 0);
+    }, 0) / feedingMines.length;
+    const facOpPerUnit = getFacilityCfg(factoryId, 'factory').opCostPerUnit ?? 0;
+    const hubOpPerUnit = getFacilityCfg(hubId, 'salesHub').opCostPerUnit ?? 0;
+    const op = units * (mineOpPerUnit + facOpPerUnit + hubOpPerUnit);
+
+    revenue       += rev;
+    transportCost += trans;
+    opCost        += op;
+
+    const mineLabel = feedingMines.map(r => CONFIG.regions[r.from].label).join(', ');
+    rows.push({
+      label:     `${mineLabel} → ${CONFIG.regions[factoryId].label} → ${hubRegion.label}`,
+      units,
+      revenue:   rev,
+      transport: trans,
+      opCost:    op,
+    });
+  }
+
+  return {
+    revenue,
+    opCost,
+    transportCost,
+    netProfit: revenue - opCost - transportCost,
+    rows,
+  };
+}
+
+function showResultOverlay(result) {
+  const profitColor = result.netProfit >= 0 ? 'green' : 'red';
+
+  const rowsHtml = result.rows.map(r => `
+    <div class="result-row">
+      <span>${r.label} (${r.units} units)</span>
+      <span class="green">+$${r.revenue.toLocaleString()}</span>
+    </div>
+    <div class="result-row" style="font-size:0.78rem;color:#aaa">
+      <span>&nbsp;&nbsp;Operating cost</span>
+      <span class="red">-$${r.opCost.toLocaleString()}</span>
+    </div>
+    <div class="result-row" style="font-size:0.78rem;color:#aaa">
+      <span>&nbsp;&nbsp;Transport cost</span>
+      <span class="red">-$${r.transport.toLocaleString()}</span>
+    </div>
+  `).join('');
+
+  document.getElementById('result-rows').innerHTML = `
+    ${rowsHtml}
+    <div class="result-row total">
+      <span>Net Profit</span>
+      <span class="${profitColor}">$${result.netProfit.toLocaleString()}</span>
+    </div>
+  `;
+
+  document.getElementById('result-overlay').classList.remove('hidden');
+
+  // Wire submit button with current result
+  document.getElementById('btn-submit-score').onclick = () => submitScore(result);
+}
+
+function submitScore(result) {
+  const studentId = document.getElementById('student-id').value.trim();
+  const name      = document.getElementById('player-name').value.trim();
+  if (!studentId) { toast('학번을 입력하세요!'); return; }
+  if (!name)      { toast('이름을 입력하세요!'); return; }
+
+  const sfRoutes = state.routes.filter(r => r.type === 'mine-factory');
+  const fhRoutes = state.routes.filter(r => r.type === 'factory-hub');
+  const chainParts = fhRoutes.map(fh => {
+    const mines = sfRoutes.filter(r => r.to === fh.from).map(r => CONFIG.regions[r.from].label).join('+');
+    return `${mines} → ${CONFIG.regions[fh.from].label} → ${CONFIG.regions[fh.to].label}`;
+  });
+  const chain = chainParts.join(' | ');
+  const units = result.rows.reduce((s, r) => s + r.units, 0);
+
+  if (_streamlitActive) {
+    // Inside Streamlit — use bidirectional component communication
+    Streamlit.setComponentValue({
+      type: 'submit_score',
+      studentId,
+      name,
+      profit: result.netProfit,
+      units,
+      chain,
+    });
+    document.getElementById('submit-section').style.display = 'none';
+    toast('🏆 등록 중…');
+  } else {
+    // Standalone (Netlify / GitHub Pages) — open Streamlit in new tab
+    const url = STREAMLIT();
+    if (!url || url === 'STREAMLIT_URL') { toast('Leaderboard not configured yet.'); return; }
+    const params = new URLSearchParams({ autosubmit: '1', studentId, name, profit: result.netProfit, units, chain });
+    window.open(`${url}/?${params}`, '_blank');
+    toast('🏆 리더보드에 등록 중…');
+  }
+}
+
+// ── Leaderboard overlay ───────────────────────────────────────────────────────
+
+function openLeaderboard() {
+  const url = STREAMLIT();
+  if (!url || url === 'STREAMLIT_URL') { toast('Leaderboard not configured yet.'); return; }
+  window.open(url, '_blank');
+}
+
+
+function onRestart() {
+  state.budget      = CONFIG.budget.initial;
+  state.totalProfit = 0;
+  state.activeMode  = null;
+  state.facilities  = {};
+  state.routes      = [];
+
+  document.body.classList.remove('build-mode');
+  document.getElementById('result-overlay').classList.add('hidden');
+  document.getElementById('rank-result').style.display   = 'none';
+  document.getElementById('submit-section').style.display = '';
+  updateToolbarActive();
+  updateHUD();
+  renderPins();
+  setAnnouncement(STAGES[0].text);
+
+  if (_streamlitActive) {
+    Streamlit.setComponentValue({ type: 'play_again' });
+  }
+}
+
+// ── HUD ───────────────────────────────────────────────────────────────────────
+
+function calcExpectedUnits() {
+  const sfRoutes = state.routes.filter(r => r.type === 'mine-factory');
+  const fhRoutes = state.routes.filter(r => r.type === 'factory-hub');
+  let total = 0;
+  for (const fhRoute of fhRoutes) {
+    const factoryId = fhRoute.from;
+    const hubId     = fhRoute.to;
+    if (state.facilities[factoryId] !== 'factory')  continue;
+    if (state.facilities[hubId]     !== 'salesHub') continue;
+    const feedingMines = sfRoutes.filter(r => r.to === factoryId);
+    if (feedingMines.length === 0) continue;
+    const rawSupply  = feedingMines.reduce((s, r) => s + (getFacilityCfg(r.from, 'mine').outputPerPeriod ?? 0), 0);
+    const factoryCfg = getFacilityCfg(factoryId, 'factory');
+    total += Math.min(rawSupply, factoryCfg.outputPerPeriod, CONFIG.regions[hubId].demand);
+  }
+  return total;
+}
+
+function updateHUD() {
+  document.getElementById('hud-budget').textContent = `$${state.budget.toLocaleString()}`;
+  const units = calcExpectedUnits();
+  document.getElementById('hud-output').textContent = units > 0 ? `${units} units` : '— units';
+  const p = document.getElementById('hud-profit');
+  p.textContent = `$${state.totalProfit.toLocaleString()}`;
+  p.className   = state.totalProfit >= 0 ? 'green' : 'red';
+}
+
+// ── Toast ─────────────────────────────────────────────────────────────────────
+
+let toastTimer;
+function toast(msg, duration = 2500) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), duration);
+}
+</script>
+</body>
+</html>

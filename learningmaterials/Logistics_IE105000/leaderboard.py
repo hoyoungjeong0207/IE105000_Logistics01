@@ -158,7 +158,7 @@ if st.session_state.tab == "🎮 Game":
 
     if comp_val and isinstance(comp_val, dict):
         t = comp_val.get("type")
-        if t == "submit_score":
+        if t == "submit_score" and not st.session_state.get("submit_done"):
             add_score(
                 comp_val.get("name", ""),
                 comp_val.get("profit", 0),
@@ -170,11 +170,13 @@ if st.session_state.tab == "🎮 Game":
             profit = int(comp_val.get("profit", 0))
             rank  = int((df["profit"] > profit).sum()) + 1
             total = len(df)
+            st.session_state.submit_done  = True
             st.session_state.submit_rank  = rank
             st.session_state.submit_total = total
             st.session_state.submit_name  = comp_val.get("name", "")
             st.rerun()
         elif t == "play_again":
+            st.session_state.pop("submit_done",  None)
             st.session_state.pop("submit_rank",  None)
             st.session_state.pop("submit_total", None)
             st.session_state.pop("submit_name",  None)

@@ -32,7 +32,9 @@ def _try_refresh_component(src: Path) -> None:
             '<script src="game.js"></script>',
             f'<script>{(src / "game.js").read_text(encoding="utf-8")}</script>',
         )
-        (comp_dir / "index.html").write_text(html, encoding="utf-8")
+        out = comp_dir / "index.html"
+        if not out.exists() or out.read_text(encoding="utf-8") != html:
+            out.write_text(html, encoding="utf-8")
     except Exception:
         pass  # fall back to committed _comp/index.html
 
@@ -51,6 +53,7 @@ def init_db():
     conn.execute("""
         CREATE TABLE IF NOT EXISTS scores (
             id           INTEGER PRIMARY KEY AUTOINCREMENT,
+            submit_id    TEXT    DEFAULT '',
             student_id   TEXT    DEFAULT '',
             name         TEXT    NOT NULL,
             profit       INTEGER NOT NULL,
@@ -59,11 +62,15 @@ def init_db():
             submitted_at TEXT    DEFAULT (datetime('now','localtime'))
         )
     """)
-    # Migration for existing DB
-    try:
-        conn.execute("ALTER TABLE scores ADD COLUMN student_id TEXT DEFAULT ''")
-    except Exception:
-        pass
+    # Migrations for existing DBs
+    for col_def in [
+        "student_id TEXT DEFAULT ''",
+        "submit_id TEXT DEFAULT ''",
+    ]:
+        try:
+            conn.execute(f"ALTER TABLE scores ADD COLUMN {col_def}")
+        except Exception:
+            pass
     conn.commit()
     conn.close()
 
@@ -75,11 +82,19 @@ def get_scores():
     conn.close()
     return df
 
-def add_score(name, profit, units, chain, student_id=""):
+def add_score(name, profit, units, chain, student_id="", submit_id=""):
     conn = get_conn()
+    # DB-level duplicate guard: skip if this submit_id was already recorded
+    if submit_id:
+        already = conn.execute(
+            "SELECT id FROM scores WHERE submit_id = ?", (submit_id,)
+        ).fetchone()
+        if already:
+            conn.close()
+            return
     conn.execute(
-        "INSERT INTO scores (student_id, name, profit, units, chain) VALUES (?,?,?,?,?)",
-        (student_id.strip(), name.strip(), int(profit), int(units), chain.strip())
+        "INSERT INTO scores (submit_id, student_id, name, profit, units, chain) VALUES (?,?,?,?,?,?)",
+        (submit_id, student_id.strip(), name.strip(), int(profit), int(units), chain.strip())
     )
     conn.commit()
     conn.close()
@@ -167,6 +182,7 @@ if st.session_state.tab == "🎮 Game":
                     comp_val.get("units", 0),
                     comp_val.get("chain", ""),
                     comp_val.get("studentId", ""),
+                    submit_id=submit_id,
                 )
                 df = get_scores()
                 profit = int(comp_val.get("profit", 0))
@@ -178,10 +194,13 @@ if st.session_state.tab == "🎮 Game":
                 st.session_state.submit_name    = comp_val.get("name", "")
                 st.rerun()
         elif t == "play_again":
-            st.session_state.pop("submit_rank",  None)
-            st.session_state.pop("submit_total", None)
-            st.session_state.pop("submit_name",  None)
-            st.rerun()
+            # Only rerun once to clear rank props; guard prevents infinite loop
+            # (comp_val stays as 'play_again' across reruns until JS sends a new value)
+            if "submit_rank" in st.session_state:
+                st.session_state.pop("submit_rank",  None)
+                st.session_state.pop("submit_total", None)
+                st.session_state.pop("submit_name",  None)
+                st.rerun()
 
 # ══════════════════════════════════════════════════════════════════════════════
 # 🏆  LEADERBOARD  (+ inline submit form when score data is present)

@@ -662,7 +662,28 @@ body.build-mode .region-pin:not(.has-facility) .pin-circle {
 #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
 body{height:680px!important;}</style>
-  <script src="https://unpkg.com/streamlit-component-lib/dist/index.js"></script>
+  <script>
+  // Minimal Streamlit Component API — no CDN dependency
+  (function () {
+    function send(type, data) {
+      window.parent.postMessage(Object.assign({ isStreamlitMessage: true, type: type }, data), '*');
+    }
+    window.Streamlit = {
+      RENDER_EVENT: 'streamlit:render',
+      setComponentReady: function () { send('streamlit:componentReady', { apiVersion: 1 }); },
+      setComponentValue: function (value) { send('streamlit:setComponentValue', { value: value, dataType: 'json' }); },
+      setFrameHeight: function (height) {
+        if (height == null) height = document.documentElement.scrollHeight;
+        send('streamlit:setFrameHeight', { height: height });
+      },
+    };
+    window.addEventListener('message', function (e) {
+      if (e.data && e.data.type === 'streamlit:render') {
+        window.dispatchEvent(new CustomEvent('streamlit:render', { detail: e.data }));
+      }
+    });
+  })();
+  </script>
 </head>
 <body>
 

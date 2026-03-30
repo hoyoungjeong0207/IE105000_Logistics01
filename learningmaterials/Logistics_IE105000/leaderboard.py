@@ -23,6 +23,7 @@ def init_db():
     conn.execute("""
         CREATE TABLE IF NOT EXISTS scores (
             id           INTEGER PRIMARY KEY AUTOINCREMENT,
+            student_id   TEXT    DEFAULT '',
             name         TEXT    NOT NULL,
             profit       INTEGER NOT NULL,
             units        INTEGER DEFAULT 0,
@@ -30,6 +31,11 @@ def init_db():
             submitted_at TEXT    DEFAULT (datetime('now','localtime'))
         )
     """)
+    # Migration for existing DB
+    try:
+        conn.execute("ALTER TABLE scores ADD COLUMN student_id TEXT DEFAULT ''")
+    except Exception:
+        pass
     conn.commit()
     conn.close()
 
@@ -41,11 +47,11 @@ def get_scores():
     conn.close()
     return df
 
-def add_score(name, profit, units, chain):
+def add_score(name, profit, units, chain, student_id=""):
     conn = get_conn()
     conn.execute(
-        "INSERT INTO scores (name, profit, units, chain) VALUES (?,?,?,?)",
-        (name.strip(), int(profit), int(units), chain.strip())
+        "INSERT INTO scores (student_id, name, profit, units, chain) VALUES (?,?,?,?,?)",
+        (student_id.strip(), name.strip(), int(profit), int(units), chain.strip())
     )
     conn.commit()
     conn.close()
@@ -71,20 +77,33 @@ def delete_all():
     conn.commit()
     conn.close()
 
-# ── URL pre-fill ───────────────────────────────────────────────────────────────
+# ── URL params ────────────────────────────────────────────────────────────────
 
-params     = st.query_params
-pre_profit = params.get("profit", "")
-pre_units  = params.get("units",  "")
-pre_chain  = params.get("chain",  "")
+params         = st.query_params
+pre_autosubmit = params.get("autosubmit", "")
+pre_studentId  = params.get("studentId",  "")
+pre_name       = params.get("name",       "")
+pre_profit     = params.get("profit",     "")
+pre_units      = params.get("units",      "")
+pre_chain      = params.get("chain",      "")
+
+# Auto-save score when all params arrive from game (runs only once per submission)
+if pre_autosubmit and pre_name and pre_profit:
+    if "autosubmit_done" not in st.session_state:
+        add_score(pre_name, int(pre_profit),
+                  int(pre_units) if pre_units else 0,
+                  pre_chain, pre_studentId)
+        st.session_state.autosubmit_done = True
+        st.session_state.autosubmit_name = pre_name
+        st.query_params.clear()
 
 # ── Tab navigation ─────────────────────────────────────────────────────────────
 
 TABS = ["🎮 Game", "🏆 Leaderboard", "🔐 Admin"]
 
-# If score data is passed via URL, go to Leaderboard tab for name entry
+# Default to Leaderboard tab when arriving from game submit
 if "tab" not in st.session_state:
-    st.session_state.tab = "🏆 Leaderboard" if pre_profit else "🎮 Game"
+    st.session_state.tab = "🏆 Leaderboard" if pre_autosubmit else "🎮 Game"
 
 st.title("🌐 Global Logistics Game")
 
@@ -129,22 +148,11 @@ if st.session_state.tab == "🎮 Game":
 # ══════════════════════════════════════════════════════════════════════════════
 
 elif st.session_state.tab == "🏆 Leaderboard":
-    # ── Inline submit form (shown only when score data arrives from game) ──────
-    if pre_profit:
-        st.info(f"🎮 Game result: **${int(pre_profit):,}** profit · **{pre_units}** units · {pre_chain}")
-        with st.form("submit_form"):
-            name = st.text_input("Your Name", placeholder="Enter your name to register score")
-            submitted = st.form_submit_button("🏆 Register to Leaderboard", use_container_width=True)
-            if submitted:
-                if not name.strip():
-                    st.error("Please enter your name.")
-                else:
-                    add_score(name, int(pre_profit), int(pre_units) if pre_units else 0, pre_chain)
-                    st.success(f"✅ Registered! **{name}** — ${int(pre_profit):,}")
-                    st.balloons()
-                    st.query_params.clear()
-                    st.rerun()
-        st.divider()
+    if st.session_state.get("autosubmit_done"):
+        st.success(f"✅ **{st.session_state.autosubmit_name}** 님의 점수가 등록되었습니다!")
+        st.balloons()
+        del st.session_state["autosubmit_done"]
+        del st.session_state["autosubmit_name"]
 
     df = get_scores()
     if df.empty:
@@ -164,7 +172,8 @@ elif st.session_state.tab == "🏆 Leaderboard":
         df_display["Supply Chain"] = df_display["chain"]
         df_display["Submitted"] = pd.to_datetime(df_display["submitted_at"]).dt.strftime("%Y-%m-%d %H:%M")
         df_display["Name"] = df_display.apply(
-            lambda r: medals.get(r.name, "") + " " + r["name"], axis=1
+            lambda r: medals.get(r.name, "") + " " +
+                      (f"[{r['student_id']}] " if r.get("student_id") else "") + r["name"], axis=1
         )
 
         st.dataframe(

@@ -365,9 +365,28 @@ body.build-mode .region-pin:not(.has-facility) .pin-circle {
 
 #submit-section {
   display: flex;
+  flex-direction: column;
   gap: 8px;
   margin-top: 16px;
 }
+
+#submit-fields {
+  display: flex;
+  gap: 8px;
+}
+
+#submit-fields input {
+  flex: 1;
+  padding: 9px 12px;
+  background: #0f1923;
+  border: 1px solid #2a3f55;
+  border-radius: 8px;
+  color: #e8edf2;
+  font-size: 0.88rem;
+  outline: none;
+}
+#submit-fields input:focus { border-color: #4fc3f7; }
+#submit-fields input::placeholder { color: #556; }
 
 #player-name {
   flex: 1;
@@ -601,6 +620,7 @@ body.build-mode .region-pin:not(.has-facility) .pin-circle {
   .pin-circle { width: 34px; height: 34px; font-size: 0.7rem; }
 
   #result-box { padding: 20px 18px; }
+  #submit-fields { flex-direction: column; }
 }
 
 /* ── Toast ────────────────────────────────────────────────────────────────── */

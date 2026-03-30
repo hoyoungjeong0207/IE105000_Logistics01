@@ -491,6 +491,11 @@ function showResultOverlay(result) {
 }
 
 function submitScore(result) {
+  const studentId = document.getElementById('student-id').value.trim();
+  const name      = document.getElementById('player-name').value.trim();
+  if (!studentId) { toast('학번을 입력하세요!'); return; }
+  if (!name)      { toast('이름을 입력하세요!'); return; }
+
   const url = STREAMLIT();
   if (!url || url === 'STREAMLIT_URL') { toast('Leaderboard not configured yet.'); return; }
 
@@ -502,14 +507,16 @@ function submitScore(result) {
   });
 
   const params = new URLSearchParams({
+    autosubmit: '1',
+    studentId,
+    name,
     profit: result.netProfit,
     units:  result.rows.reduce((s, r) => s + r.units, 0),
     chain:  chainParts.join(' | '),
   });
 
-  // Navigate parent Streamlit window to submit tab (no new tab)
-  window.top.location.href = `${url}/?${params}`;
-  toast('🏆 Submitting score…');
+  window.open(`${url}/?${params}`, '_blank');
+  toast('🏆 리더보드에 등록 중…');
 }
 
 // ── Leaderboard overlay ───────────────────────────────────────────────────────
